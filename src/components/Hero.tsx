@@ -20,7 +20,7 @@ const IconLinkedIn = () => (
 
 export default function Hero() {
   return (
-    <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-16 sm:px-10 lg:flex-row lg:items-center lg:justify-between">
+    <section id="hero" className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-16 sm:px-10 lg:flex-row lg:items-center lg:justify-between">
       <div className="max-w-2xl space-y-6">
         <span className="inline-flex rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1 text-sm font-semibold uppercase tracking-[0.24em] text-cyan-200">
           Développeur Web & Spécialiste Système/Réseaux

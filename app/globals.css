@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+html {
+  /* Défilement fluide pour les ancres de la navigation */
+  scroll-behavior: smooth;
+  /* Compense la hauteur de la navbar fixe (~72px) pour que le titre
+     de section ne soit jamais masqué lors du défilement vers une ancre */
+  scroll-padding-top: 80px;
+}
+
 :root {
   --background: #0F172A;
   --surface: #1E293B;
@@ -16,6 +24,7 @@
   --color-cyan-500: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-artistic: var(--font-dancing);
 }
 
 body {

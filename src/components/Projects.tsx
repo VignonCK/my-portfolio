@@ -17,12 +17,12 @@ function carteProjet(projet: Projet) {
       className="group rounded-3xl border border-white/10 bg-slate-800 p-6 transition hover:border-cyan-500"
     >
       <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
-        {projet.categorie}
+        {projet.etiquetteCategorie}
       </span>
       <h3 className="mt-5 text-2xl font-semibold text-[var(--text-primary)]">
         {projet.titre}
       </h3>
-      <p className="mt-3 text-sm leading-6 text-slate-300">{projet.description}</p>
+      <p className="mt-3 text-sm leading-6 text-slate-300">{projet.resume}</p>
       <div className="mt-5 flex flex-wrap gap-2">
         {projet.technologies.map((tech) => (
           <span
@@ -43,7 +43,18 @@ export default function Projects() {
   const projetsFiltres =
     filtreActif === "Tous"
       ? PROJETS
-      : PROJETS.filter((projet) => projet.categorie === filtreActif);
+      : PROJETS.filter((projet) => {
+          if (filtreActif === "Web") {
+            return projet.categorie.some((cat) => cat.includes("Web"));
+          }
+          if (filtreActif === "Réseaux") {
+            return projet.categorie.some((cat) => cat.includes("Réseaux"));
+          }
+          if (filtreActif === "Données/ML") {
+            return projet.categorie.some((cat) => cat.includes("Machine Learning") || cat.includes("Data"));
+          }
+          return false;
+        });
 
   return (
     <section id="projets" className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-10">

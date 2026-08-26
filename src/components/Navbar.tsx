@@ -26,6 +26,7 @@ import Logo from '@/src/components/Logo';
 /** Définition des ancres de navigation avec leurs libellés et ids de section */
 const LIENS_NAV = [
   { libelle: 'Accueil',      idSection: 'hero' },
+  { libelle: 'À propos',     idSection: 'apropos' },
   { libelle: 'Projets',      idSection: 'projets' },
   { libelle: 'Compétences',  idSection: 'competences' },
   { libelle: 'Contact',      idSection: 'contact' },

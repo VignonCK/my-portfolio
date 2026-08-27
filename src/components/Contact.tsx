@@ -56,10 +56,10 @@ export default function Contact() {
     >
       {/* ── En-tête de section ──────────────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="mb-14 text-center"
       >
         <p className="text-sm uppercase tracking-[0.3em] text-[var(--accent)]">
@@ -82,8 +82,8 @@ export default function Contact() {
         <motion.div
           initial={{ opacity: 0, x: shouldReduceMotion ? 0 : -20 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
           className="flex flex-col justify-between gap-8 rounded-3xl border border-white/10 bg-slate-900/60 p-8 backdrop-blur-md"
         >
           <div className="space-y-6">
@@ -169,8 +169,8 @@ export default function Contact() {
         <motion.div
           initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
           className="rounded-3xl border border-white/10 bg-slate-900/80 p-8 backdrop-blur-md shadow-xl sm:p-10"
         >
           <form onSubmit={envoyerMessage} className="space-y-5">

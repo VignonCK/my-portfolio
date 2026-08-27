@@ -136,9 +136,10 @@ function CarteCompetence({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.45, delay: delai, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.35, delay: delai, ease: 'easeOut' }}
       className="group relative flex w-36 flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-slate-900/40 p-4 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-slate-800/60 sm:w-40 sm:p-5"
       style={{
         boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.35)',
@@ -250,10 +251,10 @@ export default function Skills() {
     >
       {/* ── En-tête ──────────────────────────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="mb-14 text-center"
       >
         <p className="text-sm uppercase tracking-[0.3em] text-[var(--text-secondary)]">
@@ -271,9 +272,13 @@ export default function Skills() {
       </motion.div>
 
       {/* ── Barre d'onglets ─────────────────────────────────────── */}
-      <div
+      <motion.div
         role="tablist"
         aria-label="Domaines de compétences"
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
         className="mb-14 flex flex-wrap justify-center gap-2 sm:gap-3"
       >
         {DOMAINES_COMPETENCES.map((domaine) => {
@@ -297,7 +302,7 @@ export default function Skills() {
             </button>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* ── Grille des cartes avec transition ───────────────────── */}
       <div

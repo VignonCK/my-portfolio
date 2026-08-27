@@ -4,32 +4,37 @@
  * src/components/Footer.tsx — Module 7 (Pied de page)
  *
  * Entrées : siteConfig (src/data/site-config.ts)
- * Sorties  : <footer> avec :
- *   1. Identité du candidat & mention explicite du créateur
- *   2. Date de dernière mise à jour
- *   3. Liens de navigation rapide vers les sections
- *   4. Liens vers profils professionnels (GitHub, LinkedIn)
- *   5. Bouton de retour doux en haut de page
+ * Sorties  : <footer> avec animation d'apparition douce
  *
  * Décisions clés :
  *   - Mention du créateur et date de mise à jour incluses.
  *   - Pas de mention des technologies conformément au cadrage.
+ *   - Animation scroll reveal avec whileInView (viewport.once = true).
  *   - Source unique de vérité siteConfig.
  */
 
+import { motion, useReducedMotion } from 'framer-motion';
 import { SiGithub } from 'react-icons/si';
 import { FaLinkedin } from 'react-icons/fa6';
 import { TbArrowUp } from 'react-icons/tb';
 import { siteConfig } from '@/src/data/site-config';
 
 export default function Footer() {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <footer className="border-t border-white/10 bg-slate-950 px-6 py-12 text-slate-400 sm:px-10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between"
+      >
         {/* Colonne gauche : Identité & Créateur */}
         <div>
           <a
@@ -100,7 +105,7 @@ export default function Footer() {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Copyright en bas */}
       <div className="mx-auto mt-8 max-w-6xl border-t border-white/5 pt-6 text-center text-xs text-slate-500">

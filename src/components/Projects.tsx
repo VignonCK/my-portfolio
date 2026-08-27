@@ -21,11 +21,11 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { SiGithub } from 'react-icons/si';
 import {
   TbExternalLink,
-  TbCheck,
+  TbCircleCheck,
+  TbClock,
   TbFilter,
   TbX,
   TbCode,
-  TbLock,
 } from 'react-icons/tb';
 import {
   CATEGORIES_FILTRES,
@@ -93,29 +93,42 @@ function CarteProjet({
   onSelectTech: (tech: string) => void;
   shouldReduceMotion: boolean;
 }) {
+  const estTermine = projet.statut === 'Terminé';
+
   return (
     <motion.article
-      layout={!shouldReduceMotion}
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-slate-900/80 p-5 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/40 hover:shadow-[0_20px_40px_-15px_rgba(2,132,199,0.3)] sm:p-6"
+      layout={!shouldReduceMotion ? 'position' : false}
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      transition={{
+        layout: { duration: 0.3, ease: [0.25, 1, 0.5, 1] },
+        opacity: { duration: 0.22 },
+        scale: { duration: 0.22 },
+      }}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-slate-900/80 p-5 backdrop-blur-md transition-[border-color,box-shadow,background-color] duration-300 hover:border-cyan-500/40 hover:shadow-[0_20px_40px_-15px_rgba(2,132,199,0.3)] sm:p-6"
     >
       <div>
         {/* ── 1. Image de l'interface ───────────────────────────── */}
         <ImageProjet projet={projet} />
 
-        {/* ── 2. Ligne Titre + Badge Statut ─────────────────────── */}
+        {/* ── 2. Ligne Titre + Badge Statut (Terminé / En cours) ── */}
         <div className="mt-5 flex items-center justify-between gap-3">
           <h3 className="text-xl font-bold text-white tracking-tight sm:text-2xl">
             {projet.titre}
           </h3>
 
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.15)]">
-            <TbCheck size={14} className="stroke-[2.5]" aria-hidden="true" />
-            <span>{projet.statut}</span>
-          </span>
+          {estTermine ? (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-cyan-500/40 bg-cyan-950/40 px-3 py-1 text-xs font-semibold text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.15)]">
+              <TbCircleCheck size={14} className="stroke-[2.2]" aria-hidden="true" />
+              <span>Terminé</span>
+            </span>
+          ) : (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-950/40 px-3 py-1 text-xs font-semibold text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.15)]">
+              <TbClock size={14} className="stroke-[2.2]" aria-hidden="true" />
+              <span>En cours</span>
+            </span>
+          )}
         </div>
 
         {/* ── 3. Description brève ──────────────────────────────── */}
@@ -147,9 +160,10 @@ function CarteProjet({
         </div>
       </div>
 
-      {/* ── 5. Liens d'action : Voir le projet + Code ──────────── */}
+      {/* ── 5. Liens d'action : Voir le projet + Code (Toujours affichés) ──── */}
       <div className="mt-7 flex items-center gap-3">
-        {projet.urlDemo && (
+        {/* Bouton Voir le projet (actif ou grisé) */}
+        {projet.urlDemo ? (
           <a
             href={projet.urlDemo}
             target="_blank"
@@ -160,8 +174,20 @@ function CarteProjet({
             <TbExternalLink size={16} aria-hidden="true" />
             <span>Voir le projet</span>
           </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            title="Démonstration non déployée pour ce projet"
+            className="flex flex-1 cursor-not-allowed items-center justify-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-950/20 py-2.5 px-5 text-sm font-semibold text-cyan-500/40"
+          >
+            <TbExternalLink size={16} aria-hidden="true" />
+            <span>Voir le projet</span>
+          </button>
         )}
 
+        {/* Bouton Code (actif ou grisé avec icône GitHub) */}
         {projet.urlGithub ? (
           <a
             href={projet.urlGithub}
@@ -174,13 +200,16 @@ function CarteProjet({
             <span>Code</span>
           </a>
         ) : (
-          <span
-            title="Dépôt de code privé / propriétaire"
-            className="flex cursor-not-allowed items-center justify-center gap-1.5 rounded-full border border-white/5 bg-white/[0.02] py-2.5 px-4 text-xs font-medium text-slate-500"
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            title="Code source privé / propriétaire"
+            className="flex cursor-not-allowed items-center justify-center gap-2 rounded-full border border-white/5 bg-transparent py-2.5 px-5 text-sm font-medium text-slate-600"
           >
-            <TbLock size={13} />
-            <span>Code privé</span>
-          </span>
+            <SiGithub size={15} aria-hidden="true" />
+            <span>Code</span>
+          </button>
         )}
       </div>
     </motion.article>
@@ -212,10 +241,10 @@ export default function Projects() {
     >
       {/* ── En-tête de section ──────────────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="mb-12"
       >
         <p className="text-sm uppercase tracking-[0.3em] text-[var(--accent)]">
@@ -238,7 +267,13 @@ export default function Projects() {
       </motion.div>
 
       {/* ── Barre de filtres ────────────────────────────────────── */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
+        className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
         {/* Filtres par domaine */}
         <div
           role="group"
@@ -282,11 +317,14 @@ export default function Projects() {
             </span>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* ── Grille de projets avec transitions Framer Motion ─────── */}
-      <motion.div layout className="grid gap-6 md:grid-cols-2">
-        <AnimatePresence mode="popLayout">
+      <motion.div
+        layout="position"
+        className="grid gap-6 md:grid-cols-2"
+      >
+        <AnimatePresence>
           {projetsAffiches.length > 0 ? (
             projetsAffiches.map((projet) => (
               <CarteProjet

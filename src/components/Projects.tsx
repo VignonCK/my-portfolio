@@ -7,12 +7,12 @@
  * Sorties  : <section id="projets"> avec :
  *   1. En-tête de section
  *   2. Barre de filtres par domaine + filtre par outil interactif
- *   3. Grille de cartes au design fidèle à la maquette cible :
+ *   3. Grille de cartes au design direct fidèle à la maquette cible :
  *      - Image d'aperçu de l'interface
- *      - Titre + Badge "✓ Terminé"
+ *      - Titre + Badge statut ("✓ Terminé")
  *      - Description brève (2 lignes)
- *      - Tags technologiques cliquables
- *      - Bouton principal "↗ Voir le projet" + Bouton "Code"
+ *      - Tags technologiques cliquables pour filtrage
+ *      - Boutons directs d'action : "Voir le projet" (cyan) + "Code" (ou "Code privé")
  */
 
 import { useState } from 'react';
@@ -25,6 +25,7 @@ import {
   TbFilter,
   TbX,
   TbCode,
+  TbLock,
 } from 'react-icons/tb';
 import {
   CATEGORIES_FILTRES,
@@ -39,7 +40,6 @@ function ImageProjet({ projet }: { projet: Projet }) {
   const [imageErreur, setImageErreur] = useState(false);
 
   if (imageErreur) {
-    // Rendu de secours stylisé (mockup abstrait) si l'image locale n'est pas encore déposée
     return (
       <div className="relative flex aspect-[16/9.5] w-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-5">
         {/* Barre de fenêtre style navigateur */}
@@ -162,7 +162,7 @@ function CarteProjet({
           </a>
         )}
 
-        {projet.urlGithub && (
+        {projet.urlGithub ? (
           <a
             href={projet.urlGithub}
             target="_blank"
@@ -173,6 +173,14 @@ function CarteProjet({
             <SiGithub size={15} aria-hidden="true" />
             <span>Code</span>
           </a>
+        ) : (
+          <span
+            title="Dépôt de code privé / propriétaire"
+            className="flex cursor-not-allowed items-center justify-center gap-1.5 rounded-full border border-white/5 bg-white/[0.02] py-2.5 px-4 text-xs font-medium text-slate-500"
+          >
+            <TbLock size={13} />
+            <span>Code privé</span>
+          </span>
         )}
       </div>
     </motion.article>

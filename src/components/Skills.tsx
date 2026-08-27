@@ -1,65 +1,331 @@
-export default function Skills() {
+'use client';
+
+/**
+ * src/components/Skills.tsx — Module 6 (Anneaux SVG + Icônes d'outils + Cartes avec ombre encadrée au survol)
+ *
+ * Entrées : DOMAINES_COMPETENCES (src/data/competences.ts)
+ * Sorties  : <section id="competences"> avec :
+ *   1. En-tête de section
+ *   2. Barre d'onglets colorés par domaine (Réseaux / IA & Data / Dev Web / Outils)
+ *   3. Grille de cartes élégantes avec anneau de progression SVG, icônes d'outils (react-icons),
+ *      et effet d'ombre/cadre lumineux au survol.
+ */
+
+import { useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import type { IconType } from 'react-icons';
+import {
+  SiCisco,
+  SiPython,
+  SiNumpy,
+  SiPandas,
+  SiJupyter,
+  SiNextdotjs,
+  SiTypescript,
+  SiTailwindcss,
+  SiHtml5,
+  SiGit,
+  SiLinux,
+  SiVercel,
+} from 'react-icons/si';
+import {
+  TbNetwork,
+  TbShieldCheck,
+  TbRoute,
+  TbShieldLock,
+  TbBrain,
+  TbTopologyComplex,
+} from 'react-icons/tb';
+import { DOMAINES_COMPETENCES, type Competence } from '@/src/data/competences';
+
+// ─── Constantes SVG ───────────────────────────────────────────────────────────
+
+/** Rayon de l'anneau dans un viewBox 100×100 */
+const RADIUS = 38;
+/** Épaisseur du trait de l'anneau */
+const STROKE_W = 6;
+/** Périmètre complet = 2π × r ≈ 238.76 */
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+// ─── Config couleurs par domaine ──────────────────────────────────────────────
+
+const COULEURS: Record<
+  string,
+  {
+    hex: string;
+    ongletActif: string;
+    ongletHover: string;
+    glowRgba: string;
+  }
+> = {
+  'infra-reseaux': {
+    hex: '#22d3ee',
+    ongletActif:
+      'border-cyan-400 bg-cyan-400/10 text-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.35)]',
+    ongletHover: 'hover:border-cyan-400/40 hover:text-cyan-400/70',
+    glowRgba: 'rgba(34, 211, 238, 0.3)',
+  },
+  'ia-data': {
+    hex: '#fb923c',
+    ongletActif:
+      'border-orange-400 bg-orange-400/10 text-orange-300 shadow-[0_0_14px_rgba(251,146,60,0.35)]',
+    ongletHover: 'hover:border-orange-400/40 hover:text-orange-400/70',
+    glowRgba: 'rgba(251, 146, 60, 0.3)',
+  },
+  'dev-logiciel': {
+    hex: '#a78bfa',
+    ongletActif:
+      'border-violet-400 bg-violet-400/10 text-violet-300 shadow-[0_0_14px_rgba(167,139,250,0.35)]',
+    ongletHover: 'hover:border-violet-400/40 hover:text-violet-400/70',
+    glowRgba: 'rgba(167, 139, 250, 0.3)',
+  },
+  'devops-outils': {
+    hex: '#34d399',
+    ongletActif:
+      'border-emerald-400 bg-emerald-400/10 text-emerald-300 shadow-[0_0_14px_rgba(52,211,153,0.35)]',
+    ongletHover: 'hover:border-emerald-400/40 hover:text-emerald-400/70',
+    glowRgba: 'rgba(52, 211, 153, 0.3)',
+  },
+};
+
+// ─── Mapping des icônes par compétence ────────────────────────────────────────
+
+const ICONS: Record<string, IconType> = {
+  // Réseaux
+  'cisco-ios': SiCisco,
+  'vlan-trunking': TbNetwork,
+  'cisco-asa': TbShieldCheck,
+  'ospf-routage': TbRoute,
+  'nat-acl': TbShieldLock,
+  // IA & Data
+  'python': SiPython,
+  'numpy-scipy': SiNumpy,
+  'algebre-ml': TbBrain,
+  'pandas': SiPandas,
+  'jupyter': SiJupyter,
+  // Dev Web
+  'nextjs-react': SiNextdotjs,
+  'typescript': SiTypescript,
+  'tailwind': SiTailwindcss,
+  'html-css': SiHtml5,
+  // DevOps & Outils
+  'git-github': SiGit,
+  'linux': SiLinux,
+  'vercel': SiVercel,
+  'packet-tracer': TbTopologyComplex,
+};
+
+// ─── Sous-composant : Carte de compétence avec Anneau SVG & Icône ─────────────
+
+function CarteCompetence({
+  competence,
+  couleur,
+  glowRgba,
+  index,
+  shouldReduceMotion,
+}: {
+  competence: Competence;
+  couleur: string;
+  glowRgba: string;
+  index: number;
+  shouldReduceMotion: boolean;
+}) {
+  const targetOffset = CIRCUMFERENCE * (1 - competence.pourcentage / 100);
+  const Icon = ICONS[competence.id];
+  const delai = shouldReduceMotion ? 0 : index * 0.07;
+
   return (
-    <section id="competences" className="mx-auto w-full max-w-6xl px-6 py-16 sm:px-10">
-      <div className="mb-10">
-        <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Compétences clés</p>
-        <h2 className="mt-3 text-4xl font-bold text-[var(--text-primary)] sm:text-5xl">
-          Expertise technique et excellence académique.
-        </h2>
+    <motion.div
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.45, delay: delai, ease: [0.16, 1, 0.3, 1] }}
+      className="group relative flex w-36 flex-col items-center justify-between gap-4 rounded-2xl border border-white/10 bg-slate-900/40 p-4 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-slate-800/60 sm:w-40 sm:p-5"
+      style={{
+        boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.35)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = `0 14px 30px -5px rgba(0, 0, 0, 0.6), 0 0 22px 2px ${glowRgba}`;
+        e.currentTarget.style.borderColor = `${couleur}66`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = '0 4px 20px -2px rgba(0, 0, 0, 0.35)';
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+      }}
+    >
+      {/* SVG Anneau */}
+      <div className="relative h-20 w-20 sm:h-24 sm:w-24">
+        <svg
+          viewBox="0 0 100 100"
+          className="h-full w-full -rotate-90"
+          aria-hidden="true"
+        >
+          {/* Piste de fond */}
+          <circle
+            cx="50"
+            cy="50"
+            r={RADIUS}
+            fill="none"
+            stroke="rgba(255,255,255,0.07)"
+            strokeWidth={STROKE_W}
+          />
+
+          {/* Arc de progression avec glow */}
+          <g style={{ filter: `drop-shadow(0 0 7px ${couleur})` }}>
+            <motion.circle
+              cx="50"
+              cy="50"
+              r={RADIUS}
+              fill="none"
+              stroke={couleur}
+              strokeWidth={STROKE_W}
+              strokeLinecap="round"
+              strokeDasharray={CIRCUMFERENCE}
+              initial={{
+                strokeDashoffset: shouldReduceMotion ? targetOffset : CIRCUMFERENCE,
+              }}
+              animate={{ strokeDashoffset: targetOffset }}
+              transition={{
+                duration: shouldReduceMotion ? 0 : 1.5,
+                ease: [0.16, 1, 0.3, 1],
+                delay: delai,
+              }}
+            />
+          </g>
+        </svg>
+
+        {/* Contenu centré : Icône + Pourcentage */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 sm:gap-1">
+          {Icon ? (
+            <Icon
+              className="text-xl transition-transform duration-300 group-hover:scale-110 sm:text-2xl lg:text-[28px]"
+              style={{
+                color: couleur,
+                filter: `drop-shadow(0 0 8px ${couleur}70)`,
+              }}
+              aria-hidden="true"
+            />
+          ) : (
+            <span
+              className="text-xs font-extrabold tracking-wide sm:text-sm"
+              style={{ color: couleur }}
+            >
+              {competence.nom.slice(0, 3).toUpperCase()}
+            </span>
+          )}
+          <span
+            className="text-[10px] font-bold tracking-tight sm:text-[11px]"
+            style={{ color: couleur }}
+          >
+            {competence.pourcentage}%
+          </span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-slate-800 p-6 shadow-lg shadow-black/20">
-          <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Développement Web & UI</p>
-          <h3 className="mt-5 text-2xl font-semibold text-[var(--text-primary)]">Front-end & expérience utilisateur</h3>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'HTML5/CSS3', 'SEO'].map((skill) => (
-              <span
-                key={skill}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
+      {/* Nom de la compétence */}
+      <span className="text-center text-xs font-semibold leading-tight text-[var(--text-primary)] transition-colors group-hover:text-white sm:text-[13px]">
+        {competence.nom}
+      </span>
+    </motion.div>
+  );
+}
 
-        <div className="rounded-3xl border border-white/10 bg-slate-800 p-6 shadow-lg shadow-black/20">
-          <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Réseaux & Infrastructure</p>
-          <h3 className="mt-5 text-2xl font-semibold text-[var(--text-primary)]">Infrastructure sécurisée</h3>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {['Cisco IOS', 'Pare-feu ASA', 'VLANs / Trunking', 'DMZ', 'Routage IP', 'Sécurité'].map((skill) => (
-              <span
-                key={skill}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
+// ─── Composant principal ──────────────────────────────────────────────────────
 
-        <div className="rounded-3xl border border-cyan-500/40 bg-slate-800 p-6 shadow-lg shadow-cyan-500/10">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">
-              Distinction
-            </span>
-          </div>
-          <h3 className="mt-5 text-2xl font-semibold text-[var(--text-primary)]">Parcours Académique d’Excellence</h3>
-          <p className="mt-4 text-sm leading-6 text-slate-300">
-            Bourse d’Excellence et poursuite de formation spécialisée en Data Science & Machine Learning, avec un engagement constant vers l’innovation et la performance.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {['Python', 'NumPy', 'Algèbre Linéaire ML', 'Git / GitHub', 'Linux'].map((skill) => (
-              <span
-                key={skill}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200"
-              >
-                {skill}
-              </span>
+export default function Skills() {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
+  /**
+   * Onglet actif — initialisé sur le premier domaine.
+   */
+  const [activeTab, setActiveTab] = useState(DOMAINES_COMPETENCES[0].id);
+
+  const domaineActif = DOMAINES_COMPETENCES.find((d) => d.id === activeTab)!;
+  const configActif = COULEURS[activeTab] ?? COULEURS['infra-reseaux'];
+
+  return (
+    <section
+      id="competences"
+      aria-labelledby="titre-competences"
+      className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10"
+    >
+      {/* ── En-tête ──────────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="mb-14 text-center"
+      >
+        <p className="text-sm uppercase tracking-[0.3em] text-[var(--text-secondary)]">
+          Compétences
+        </p>
+        <h2
+          id="titre-competences"
+          className="mt-2 text-3xl font-bold text-[var(--text-primary)] sm:text-4xl lg:text-5xl"
+        >
+          Expertise technique & Savoir-faire.
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)]">
+          Technologies maîtrisées et outils utilisés au quotidien.
+        </p>
+      </motion.div>
+
+      {/* ── Barre d'onglets ─────────────────────────────────────── */}
+      <div
+        role="tablist"
+        aria-label="Domaines de compétences"
+        className="mb-14 flex flex-wrap justify-center gap-2 sm:gap-3"
+      >
+        {DOMAINES_COMPETENCES.map((domaine) => {
+          const estActif = activeTab === domaine.id;
+          const conf = COULEURS[domaine.id];
+          return (
+            <button
+              key={domaine.id}
+              role="tab"
+              aria-selected={estActif}
+              aria-controls={`panel-${domaine.id}`}
+              id={`tab-${domaine.id}`}
+              onClick={() => setActiveTab(domaine.id)}
+              className={`rounded-full border px-5 py-1.5 text-xs font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] ${
+                estActif
+                  ? conf.ongletActif
+                  : `border-white/15 text-[var(--text-secondary)] ${conf.ongletHover}`
+              }`}
+            >
+              {domaine.labelCourt}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Grille des cartes avec transition ───────────────────── */}
+      <div
+        id={`panel-${activeTab}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${activeTab}`}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -12 }}
+            transition={{ duration: 0.22, ease: 'easeInOut' }}
+            className="flex flex-wrap justify-center gap-5 sm:gap-6 lg:gap-8"
+          >
+            {domaineActif.competences.map((comp, i) => (
+              <CarteCompetence
+                key={`${activeTab}-${comp.id}`}
+                competence={comp}
+                couleur={configActif.hex}
+                glowRgba={configActif.glowRgba}
+                index={i}
+                shouldReduceMotion={shouldReduceMotion}
+              />
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

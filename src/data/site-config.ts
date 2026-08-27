@@ -2,13 +2,14 @@
  * src/data/site-config.ts
  *
  * Source unique de vérité pour les paramètres globaux du site.
- * Utilisé par la Navbar, Hero, Contact et Footer pour éviter toute
+ * Utilisé par la Navbar, Hero, About, Skills, Projects, Contact et Footer pour éviter toute
  * duplication de données (liens sociaux, URL du CV, identité du candidat).
  *
  * Décision clé : cvUrl pointe vers public/ — remplacer le fichier dans
  * public/ sans changer ce chemin garantit qu'aucun lien envoyé dans un
  * dossier de candidature ne devient mort (règle de gestion, module 8).
  */
+
 export const siteConfig = {
   /** Identité du candidat — affichée dans la navbar et les métadonnées */
   nomCandidat: 'Vignon KANLINHANON',
@@ -44,58 +45,22 @@ export const siteConfig = {
 
   /** ----------------------------------------------------------------
    * Section « À propos » — Module 3
-   *
-   * Structure :
-   *  1. bio        → bloc photo gauche + texte droite (présentation personnelle)
-   *  2. timeline   → parcours académique avec animation d'état actif au scroll
-   *
-   * Pour la photo : déposer le fichier dans public/ et renseigner apropos.bio.photoUrl.
-   * Laisser "" pour afficher le placeholder rectangulaire — aucune modif de composant.
    * ---------------------------------------------------------------- */
   apropos: {
-    /** Titre et overline de la section */
     titre: 'À propos de moi',
     sousTitre: 'Ingénierie, réseaux et ambition — le portrait d\'un candidat à la bourse d\'excellence.',
 
-    /** ── Bio : photo gauche + texte droite ─────────────────────────
-     *  [COPYWRITING] — paragraphes à affiner lors de la passe finale.
-     * ────────────────────────────────────────────────────────────── */
     bio: {
-      /**
-       * Chemin de la photo dans public/.
-       * Déposer sous le nom 'photo-apropos.jpg' puis mettre à jour ce chemin.
-       * Laisser "" → placeholder gris avec initiales.
-       */
       photoUrl: '/photo-apropos.jpeg',
-
-      /**
-       * Citation affichée en superposition sur la photo (overlay bas).
-       * [COPYWRITING] — à personnaliser lors de la passe finale.
-       */
       citation: '« L\'excellence technique n\'est pas une destination — c\'est une discipline quotidienne. »',
-
-      /**
-       * Paragraphes de présentation.
-       * [COPYWRITING] — rédigés à titre provisoire, à valider et affiner.
-       */
       paragraphes: [
         'Élève-Ingénieur en 1ère année du Cycle Ingénieur en Génie Informatique et Télécommunication à l\'EPAC, je me spécialise en réseaux informatiques et internet. Mon parcours — ponctué d\'une Mention Très Bien au Baccalauréat (16,45/20) et d\'une moyenne de 15,30/20 en cycle ingénieur — reflète une exigence académique constante et une volonté d\'excellence que je traduis concrètement à travers mes projets techniques.',
         'Ma passion se situe à la convergence des infrastructures réseaux, de l\'intelligence artificielle et de la cybersécurité. Convaincu que les ingénieurs de demain doivent maîtriser non seulement les protocoles et les architectures, mais aussi les outils d\'IA qui transforment la gestion des réseaux, je construis une vision transversale que chacune de mes réalisations vient illustrer.',
         'Curieux, rigoureux et autonome, j\'aborde chaque projet avec une démarche structurée : analyse des exigences, recherche bibliographique, conception avant implémentation. Mon objectif est de rejoindre un programme de bourse d\'excellence pour contribuer à des travaux de recherche à fort impact dans le domaine des réseaux et des systèmes distribués.',
       ],
-
-      /**
-       * Qualités personnelles affichées sous les paragraphes.
-       * [COPYWRITING] — à affiner lors de la passe finale.
-       */
       qualites: ['Curieux', 'Rigoureux', 'Autonome', 'Méthodique', 'Persévérant', 'Esprit d\'équipe'],
     },
 
-    /** ── Timeline du parcours académique ───────────────────────────
-     *  type: 'formation'  → badge cyan  "FORMATION"
-     *  type: 'experience' → badge violet "EXPÉRIENCE"
-     *  [COPYWRITING] : détails à affiner lors de la passe finale.
-     * ────────────────────────────────────────────────────────────── */
     timeline: [
       {
         id: 'cycle-ingenieur',
@@ -123,6 +88,31 @@ export const siteConfig = {
       },
     ],
   },
+
+  /** ----------------------------------------------------------------
+   * Section « Contact » — Module 7
+   * ---------------------------------------------------------------- */
+  contact: {
+    titre: 'Entrons en contact',
+    sousTitre: 'Disponible pour échanger sur vos opportunités de recherche, de stages ou de bourses d’excellence.',
+    email: 'contact@example.com',
+    localisation: 'Abomey-Calavi / Cotonou, Bénin',
+    statutDisponibilite: 'À l’écoute d’opportunités de recherche & bourses d’excellence',
+  },
+
+  /** ----------------------------------------------------------------
+   * Section « Pied de page » (Footer) — Module 7
+   * ---------------------------------------------------------------- */
+  footer: {
+    createur: 'Vignon KANLINHANON',
+    mentionDroits: 'Tous droits réservés.',
+    dateDerniereMaj: 'Août 2026',
+    liensNavigation: [
+      { label: 'Accueil', href: '#hero' },
+      { label: 'À propos', href: '#apropos' },
+      { label: 'Projets', href: '#projets' },
+      { label: 'Compétences', href: '#competences' },
+      { label: 'Contact', href: '#contact' },
+    ],
+  },
 } as const;
-
-

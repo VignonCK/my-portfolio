@@ -32,40 +32,234 @@ export const siteConfig = {
   /** Liens sociaux — centralisés ici pour éviter la duplication Hero/Contact */
   liensSociaux: {
     github: 'https://github.com/VignonCK',
-    linkedin: 'https://www.linkedin.com/in/vignon-kanlinhanon',
-    email: 'contact@example.com',
+    linkedin: 'https://www.linkedin.com/in/vignon-cadnel-k-9021272b6?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+    email: 'vignonkanlinhanon5@gmail.com',
   },
 
   /** Textes de la section Hero */
   hero: {
     badge: 'Élève-Ingénieur en M1 Réseau Informatique et Internet',
-    accroche: 'Bâtir des infrastructures réseaux résilientes et des architectures logicielles centrées sur la donnée.',
-    description: 'Passionné par la convergence des infrastructures réseaux, de l’intelligence artificielle et du développement web. Je conçois des solutions performantes, sécurisées et adaptées aux exigences académiques et industrielles.',
-  },
+    accroche: "Bâtir aujourd'hui les infrastructures que l'intelligence artificielle pilotera demain.",
+    description: "Actuellement en formation d'ingénieur en réseaux informatiques et internet, je vise à me spécialiser en machine learning appliqué au cloud et aux infrastructures réseaux : une trajectoire que je construis avec exigence et autonomie, projet après projet.",  },
 
   /** ----------------------------------------------------------------
    * Section « À propos » — Module 3
    * ---------------------------------------------------------------- */
   apropos: {
     titre: 'À propos de moi',
-    sousTitre: 'Ingénierie, réseaux et ambition — le portrait d\'un candidat à la bourse d\'excellence.',
+    sousTitre: 'Découvrez la personne derrière le parcours.',
 
     bio: {
       photoUrl: '/photo-apropos.jpeg',
-      citation: '« L\'excellence technique n\'est pas une destination — c\'est une discipline quotidienne. »',
+      citation: '« L\'excellence technique n\'est pas une destination, c\'est une discipline quotidienne. »',
       paragraphes: [
-        'Élève-Ingénieur en 1ère année du Cycle Ingénieur en Génie Informatique et Télécommunication à l\'EPAC, je me spécialise en réseaux informatiques et internet. Mon parcours — ponctué d\'une Mention Très Bien au Baccalauréat (16,45/20) et d\'une moyenne de 15,30/20 en cycle ingénieur — reflète une exigence académique constante et une volonté d\'excellence que je traduis concrètement à travers mes projets techniques.',
-        'Ma passion se situe à la convergence des infrastructures réseaux, de l\'intelligence artificielle et de la cybersécurité. Convaincu que les ingénieurs de demain doivent maîtriser non seulement les protocoles et les architectures, mais aussi les outils d\'IA qui transforment la gestion des réseaux, je construis une vision transversale que chacune de mes réalisations vient illustrer.',
-        'Curieux, rigoureux et autonome, j\'aborde chaque projet avec une démarche structurée : analyse des exigences, recherche bibliographique, conception avant implémentation. Mon objectif est de rejoindre un programme de bourse d\'excellence pour contribuer à des travaux de recherche à fort impact dans le domaine des réseaux et des systèmes distribués.',
+        "Actuellement en stage académique de fin de 3e année, je m'apprête à intégrer la 2e année du Cycle Ingénieur en Génie Informatique et Télécommunication à l'EPAC, où je me spécialise en réseaux informatiques et internet. Mon parcours, ponctué d'une Mention Très Bien au Baccalauréat (16,45/20) et d'une moyenne de 15,20/20 en 1ère année du cycle ingénieur, reflète une exigence académique constante et une volonté d'excellence que je traduis concrètement à travers mes projets techniques.",
+        "Ma passion pour l'intelligence artificielle est née d'un déclic : l'École d'Été en Intelligence Artificielle (EEIA 2025) de la Fondation Vallet, où j'ai découvert le Machine Learning et une vision claire de ce que je veux devenir : Ingénieur Machine Learning, spécialisé dans les infrastructures réseaux et cloud. Depuis, je construis chaque projet, réseau ou logiciel, comme une étape vers cette spécialisation.",
+        "Curieux, je m'appuie sur la recherche avant de me lancer ; rigoureux, j'analyse les exigences avant de concevoir ; autonome, je mène mes projets de bout en bout, de la conception à l'implémentation. Cette même exigence, je la mets au service du collectif : Secrétaire Général de l'Organe de Contrôle du H3CP par le passé, j'y ai appliqué la même rigueur à la coordination de mes pairs qu'à mes projets techniques. En dehors des projets techniques, sport et lecture m'aident à garder l'esprit vif. Mon objectif est de décrocher une bourse d'excellence pour poursuivre une formation d'ingénieur de haut niveau, avant de rejoindre une grande entreprise technologique, avec, à terme, l'ambition de créer des startups à fort impact en Afrique.",
       ],
       qualites: ['Curieux', 'Rigoureux', 'Autonome', 'Méthodique', 'Persévérant', 'Esprit d\'équipe'],
+    },
+
+    certifications: {
+      titre: 'Certifications',
+      sousTitre: "Parce que la formation ne s'arrête pas aux cours magistraux.",
+      liste: [
+        /**
+         * FORMAT À REMPLIR POUR CHAQUE ÉLÉMENT
+         *
+         * Pourquoi `lien` est optionnel ?
+         * - Certaines attestations n'ont pas de page publique de vérification.
+         * - Vous pouvez tout de même les afficher sans lien, puis ajouter la preuve plus tard.
+         * - Si vous voulez un bouton "Voir", renseignez ici un lien public.
+         *
+         * {
+         *   id: 'identifiant-unique-kebab-case',
+         *   type: 'Certification' as const, // ou 'Attestation' as const
+         *   titre: 'Nom exact de la certification ou attestation',
+         *   organisme: 'Nom de l’organisme émetteur',
+         *   date: 'Août 2026',
+         *   statut: 'Obtenue' as const, // ou 'En cours' as const
+         *   description: 'Résumé court, factuel et vérifiable de ce que valide la certification.',
+         *   apercu: '/certifications/apercus/mon-certificat-page1.jpg', // aperçu principal affiché sur la carte
+         *   galerie: [
+         *     '/certifications/apercus/mon-certificat-page1.jpg',
+         *     '/certifications/apercus/mon-certificat-page2.jpg',
+         *   ], // optionnel : images affichées dans la modale si le document a plusieurs pages
+         *   lien: 'https://...', // optionnel : lien public de consultation / vérification
+         * },
+         */
+        {
+          id: 'eeia-vallet-2025',
+          type: 'Attestation' as const,
+          titre: "Attestation de participation à l'École d'Été sur l'Intelligence Artificielle de la Fondation Vallet (EEIA 2025)",
+          organisme: 'Bénin Excellence – Fondation Vallet',
+          date: '21 juillet – 16 août 2025',
+          dateTri: '2025-08-16',
+          statut: 'Obtenue' as const,
+          description: "Programme intensif en programmation, Machine Learning et robotique, clôturé par la conception en équipe d'un système de reconnaissance faciale.",
+          apercu: '/certifications/apercus/eeia_2025_p1.png',
+          galerie: [
+            '/certifications/apercus/eeia_2025_p1.png',
+            '/certifications/apercus/eeia_2025_p2.png',
+          ],
+          lien: '',
+        },
+      ],
+
+      /**
+       * Groupes de certifications — plusieurs attestations d'un même
+       * organisme regroupées visuellement en une seule carte. Au clic,
+       * la modale s'ouvre en mode carrousel et permet de naviguer entre
+       * chaque certificat du groupe (image + titre + description propres
+       * à chaque élément, contrairement à `galerie` qui partage une seule
+       * description pour toutes les images).
+       *
+       * FORMAT À REMPLIR POUR CHAQUE ÉLÉMENT DE `items`
+       * {
+       *   id: 'identifiant-unique-kebab-case',
+       *   titre: 'Nom exact du certificat',
+       *   date: 'Date d’obtention',
+       *   description: 'Résumé court de ce que valide le certificat.',
+       *   apercu: '/certifications/apercus/mon-certificat.png',
+       * },
+       */
+      groupes: [
+        {
+          id: 'datatour',
+          type: 'Attestation' as const,
+          titre: 'Coupe d’Afrique des Nations en Science des Données',
+          organisme: 'Data Afrique Hub',
+          dateTri: '2026-07-04',
+          statut: 'Obtenue' as const,
+          resume: '3 participations, phases nationale et internationale.',
+          items: [
+            {
+              id: 'datatour-national-2025',
+              titre: 'Phase nationale 2025 : credit scoring',
+              date: '11 octobre – 1er novembre 2025',
+              description: "Modélisation d'un système de credit scoring : feature engineering par client à partir des historiques de prêts, puis entraînement d'un CatBoostClassifier évalué par ROC-AUC pour prédire le risque de défaut de paiement.",
+              apercu: '/certifications/apercus/datatour_2025_national.png',
+            },
+            {
+              id: 'datatour-international-2025',
+              titre: 'Phase internationale 2025 : recommandation vidéo',
+              date: '21 novembre – 18 décembre 2025',
+              description: "Défi de recommandation vidéo : conception d'un système intelligent de personnalisation de contenus, filtrage collaboratif (ALS) combiné à un LightGBMClassifier sur caractéristiques enrichies, puis stacking par régression logistique, évalué par ROC-AUC en validation croisée temporelle.",
+              apercu: '/certifications/apercus/datatour_2025_international.png',
+            },
+            {
+              id: 'datatour-national-2026',
+              titre: 'Phase nationale 2026 : détection de fraude',
+              date: '13 juin – 4 juillet 2026',
+              description: "Participation avec l'équipe Team EPAC à la phase nationale : conception d'un modèle de détection de fraude visant à identifier automatiquement les transactions financières suspectes.",
+              apercu: '/certifications/apercus/certificat-participation-Team EPAC.png',
+            },
+          ],
+        },
+        {
+          id: 'kaggle',
+          type: 'Certification' as const,
+          titre: 'Certifications Kaggle',
+          organisme: 'Kaggle',
+          dateTri: '2025-09-15',
+          statut: 'Obtenue' as const,
+          resume: '4 certificats de complétion en Data Science & Machine Learning.',
+          items: [
+            {
+              id: 'kaggle-pandas',
+              titre: 'Certificat de complétion : Pandas',
+              date: '25 août 2025',
+              description: 'Manipulation et analyse de données tabulaires avec la bibliothèque Pandas : indexation, filtrage, agrégation et jointures de jeux de données.',
+              apercu: '/certifications/apercus/pandas.png',
+            },
+            {
+              id: 'kaggle-data-cleaning',
+              titre: 'Certificat de complétion : Data Cleaning',
+              date: '29 août 2025',
+              description: 'Techniques de nettoyage de données : traitement des valeurs manquantes, normalisation des échelles, correction des incohérences de saisie et gestion des encodages.',
+              apercu: '/certifications/apercus/data-cleaning.png',
+            },
+            {
+              id: 'kaggle-intro-ml',
+              titre: 'Certificat de complétion : Intro to Machine Learning',
+              date: '2 septembre 2025',
+              description: 'Fondamentaux du Machine Learning : construction et validation de modèles avec scikit-learn, arbres de décision et forêts aléatoires, sous-apprentissage et sur-apprentissage.',
+              apercu: '/certifications/apercus/intro-ml.png',
+            },
+            {
+              id: 'kaggle-data-visualization',
+              titre: 'Certificat de complétion : Data Visualization',
+              date: '15 septembre 2025',
+              description: 'Visualisation de données avec Seaborn : graphiques de tendance, de distribution et de relation pour communiquer des résultats d’analyse.',
+              apercu: '/certifications/apercus/datavis.png',
+            },
+          ],
+        },
+        {
+          id: 'autres-formations',
+          type: 'Attestation' as const,
+          titre: 'Autres formations',
+          organisme: 'Domaines extra-techniques',
+          dateTri: '2025-09-06',
+          statut: 'Obtenue' as const,
+          resume: '',
+          items: [
+            {
+              id: 'digitart-aemc',
+              titre: "Attestation de participation au programme de formation Digit'Art",
+              date: '1er – 6 septembre 2025',
+              description: "Programme d'une semaine alliant compétences numériques et créativité : initiation au Pack Office, graphisme (charte graphique, création de visuels), création de contenus et personal branding, ainsi qu'une conférence sur l'intelligence artificielle appliquée à la santé.",
+              apercu: '/certifications/apercus/digitart.png',
+            },
+            {
+              id: 'rhema-marketing-reseaux-sociaux',
+              titre: 'Certificat de fin de formation en marketing des réseaux sociaux',
+              date: '9 juin 2025',
+              description: 'Formation en marketing des réseaux sociaux : création de contenus, community management, stratégies de communication digitale et publicité en ligne.',
+              apercu: '/certifications/apercus/rhema.png',
+            },
+          ],
+        },
+        {
+          id: 'maths-science-donnees',
+          type: 'Certification' as const,
+          titre: 'Spécialisation : Mathématiques pour la science des données',
+          organisme: 'Coursera',
+          dateTri: '9999-12-31',
+          statut: 'En cours' as const,
+          resume: '',
+          items: [
+            {
+              id: 'maths-algebre-lineaire',
+              titre: 'Linear Algebra for Machine Learning and Data Science',
+              date: 'En cours',
+              description: "Fondements d'algèbre linéaire appliqués au Machine Learning : vecteurs, matrices, systèmes d'équations linéaires et valeurs propres.",
+              apercu: '',
+            },
+            {
+              id: 'maths-calculus',
+              titre: 'Calculus for Machine Learning and Data Science',
+              date: 'Non commencé',
+              description: "Notions de calcul différentiel appliquées à l'optimisation des modèles de Machine Learning : dérivées, gradients et descente de gradient.",
+              apercu: '',
+            },
+            {
+              id: 'maths-probabilites-statistiques',
+              titre: 'Probability & Statistics for Machine Learning & Data Science',
+              date: 'Non commencé',
+              description: "Fondements de probabilités et statistiques pour la science des données : distributions, inférence statistique et estimation appliquées au Machine Learning.",
+              apercu: '',
+            },
+          ],
+        },
+      ],
     },
 
     timeline: [
       {
         id: 'stage-best-building',
         periode: 'Juil. 2026 – Août 2026',
-        intitule: 'Stage Académique — Développement Web & Logiciel de Gestion',
+        intitule: 'Stage Académique : Développement Web & Logiciel de Gestion',
         etablissement: 'Best-Building',
         type: 'experience' as const,
         detail: 'Conception et mise en ligne de la vitrine web de l’entreprise et développement d’une solution logicielle interne dédiée à la gestion financière et comptable.',
@@ -73,15 +267,15 @@ export const siteConfig = {
       {
         id: 'cycle-ingenieur',
         periode: 'Sept. 2025 – Juil. 2026',
-        intitule: '1ère année du Cycle Ingénieur — Génie Informatique et Télécommunication',
+        intitule: '1ère année du Cycle Ingénieur : Génie Informatique et Télécommunication',
         etablissement: 'EPAC (École Polytechnique d’Abomey-Calavi)',
         type: 'formation' as const,
-        detail: 'Spécialisation en réseaux, systèmes embarqués et sécurité informatique. Moyenne annuelle : 15,30/20.',
+        detail: "Tronc commun mêlant architecture matérielle, transmission et réseaux, et développement logiciel, complété par un stage en milieu industriel. Moyenne annuelle : 15,20/20.",
       },
       {
         id: 'eeia-vallet',
         periode: 'Juillet 2025',
-        intitule: 'École d’Été en Intelligence Artificielle (EEIA — 5ᵉ édition)',
+        intitule: 'École d’Été en Intelligence Artificielle (EEIA, 5ᵉ édition)',
         etablissement: 'Bénin Excellence – Fondation Vallet',
         type: 'experience' as const,
         detail: 'Programme intensif en programmation, Machine Learning et robotique. Conception et développement en équipe d’un système de reconnaissance faciale.',
@@ -89,7 +283,7 @@ export const siteConfig = {
       {
         id: 'prepa',
         periode: 'Sept. 2023 – Juil. 2025',
-        intitule: 'Classes Préparatoires — Systèmes Industriels',
+        intitule: 'Classes Préparatoires : Systèmes Industriels',
         etablissement: 'EPAC (École Polytechnique d’Abomey-Calavi)',
         type: 'formation' as const,
         detail: 'Formation intensive en mathématiques, physique et sciences de l’ingénieur, socle des compétences analytiques et de rigueur appliquées aux projets techniques.',
@@ -97,10 +291,10 @@ export const siteConfig = {
       {
         id: 'bac',
         periode: 'Sept. 2022 – Juil. 2023',
-        intitule: 'Baccalauréat de l’Enseignement Général — Série C',
+        intitule: 'Baccalauréat de l’Enseignement Général, Série C',
         etablissement: 'Lycée',
         type: 'formation' as const,
-        detail: 'Spécialités Mathématiques et Sciences Physiques. Mention Très Bien — Moyenne : 16,45/20.',
+        detail: 'Spécialités Mathématiques et Sciences Physiques. Mention Très Bien, moyenne : 16,45/20.',
       },
     ],
   },
@@ -111,9 +305,14 @@ export const siteConfig = {
   contact: {
     titre: 'Entrons en contact',
     sousTitre: 'Disponible pour échanger sur vos opportunités de recherche, de stages ou de bourses d’excellence.',
-    email: 'contact@example.com',
-    localisation: 'Abomey-Calavi / Cotonou, Bénin',
-    statutDisponibilite: 'À l’écoute d’opportunités de recherche & bourses d’excellence',
+    email: 'vignonkanlinhanon5@gmail.com',
+    localisation: 'AKOGBATO / Cotonou, Bénin',
+    statutDisponibilite: 'À l’écoute d’opportunités de stages & bourses d’excellence',
+    /**
+     * Clé d'accès gratuite Web3Forms (https://web3forms.com).
+     * Renseignez votre clé d'accès reçue par email pour activer l'envoi direct en boîte de réception.
+     */
+    cleWeb3Forms: 'dc3ba7f5-433d-4544-aca8-c3d5625c9e59',
   },
 
   /** ----------------------------------------------------------------

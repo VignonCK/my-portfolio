@@ -3,10 +3,10 @@
 /**
  * src/components/Projects.tsx — Module 4 (Galerie de projets — Cœur du portfolio)
  *
- * Entrées : PROJETS, CATEGORIES_FILTRES, filtrerProjets (src/data/projets.ts)
+ * Entrées : PROJETS, filtrerProjets (src/data/projets.ts)
  * Sorties  : <section id="projets"> avec :
  *   1. En-tête de section
- *   2. Barre de filtres par domaine + filtre par outil interactif
+ *   2. Filtre par outil interactif (clic sur un tag technologique)
  *   3. Grille de cartes au design direct fidèle à la maquette cible :
  *      - Image d'aperçu de l'interface
  *      - Titre + Badge statut ("✓ Terminé")
@@ -28,8 +28,6 @@ import {
   TbCode,
 } from 'react-icons/tb';
 import {
-  CATEGORIES_FILTRES,
-  type CategorieFiltre,
   type Projet,
   filtrerProjets,
 } from '@/src/data/projets';
@@ -188,7 +186,7 @@ function CarteProjet({
         )}
 
         {/* Bouton Code (actif ou grisé avec icône GitHub) */}
-        {projet.urlGithub ? (
+        {projet.urlGithub && projet.codeVisible ? (
           <a
             href={projet.urlGithub}
             target="_blank"
@@ -221,13 +219,12 @@ function CarteProjet({
 export default function Projects() {
   const shouldReduceMotion = useReducedMotion() ?? false;
 
-  const [categorieActive, setCategorieActive] = useState<CategorieFiltre>('Tous');
   const [filtreTech, setFiltreTech] = useState<string | null>(null);
 
   /**
-   * Filtrage dynamique des projets avec gestion des catégories et des tags technologiques
+   * Filtrage dynamique des projets par tag technologique
    */
-  const projetsAffiches = filtrerProjets(categorieActive, filtreTech);
+  const projetsAffiches = filtrerProjets(filtreTech);
 
   const handleSelectTech = (tech: string) => {
     setFiltreTech((prev) => (prev?.toLowerCase() === tech.toLowerCase() ? null : tech));
@@ -259,65 +256,35 @@ export default function Projects() {
               Projets & Réalisations.
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)]">
-              Applications déployées, architectures réseaux et modèles démontrant la
-              maîtrise technique du candidat.
+              Ce que j&apos;ai construit en dit plus long que ce que je pourrais écrire — voici mes réalisations.
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* ── Barre de filtres ────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.15 }}
-        transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
-        className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-      >
-        {/* Filtres par domaine */}
-        <div
-          role="group"
-          aria-label="Filtrer les projets par catégorie"
-          className="flex flex-wrap gap-2"
+      {/* ── Indicateur de filtre par technologie active ─────────── */}
+      {filtreTech && (
+        <motion.div
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
+          className="mb-8 flex items-center gap-2"
         >
-          {CATEGORIES_FILTRES.map((cat) => {
-            const isActif = categorieActive === cat;
-            return (
-              <button
-                key={cat}
-                type="button"
-                aria-pressed={isActif}
-                onClick={() => setCategorieActive(cat)}
-                className={`rounded-full px-5 py-2 text-xs font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] ${
-                  isActif
-                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_16px_rgba(6,182,212,0.4)]'
-                    : 'border border-white/10 bg-white/5 text-[var(--text-secondary)] hover:border-white/20 hover:bg-white/10 hover:text-[var(--text-primary)]'
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Indicateur de filtre par technologie active */}
-        {filtreTech && (
-          <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 rounded-full border border-cyan-400/40 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-300">
-              <TbFilter size={12} />
-              <span>Outil : <strong>{filtreTech}</strong></span>
-              <button
-                type="button"
-                onClick={() => setFiltreTech(null)}
-                aria-label="Effacer le filtre par technologie"
-                className="ml-1 rounded-full p-0.5 hover:bg-cyan-400/20"
-              >
-                <TbX size={13} />
-              </button>
-            </span>
-          </div>
-        )}
-      </motion.div>
+          <span className="flex items-center gap-1.5 rounded-full border border-cyan-400/40 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-300">
+            <TbFilter size={12} />
+            <span>Outil : <strong>{filtreTech}</strong></span>
+            <button
+              type="button"
+              onClick={() => setFiltreTech(null)}
+              aria-label="Effacer le filtre par technologie"
+              className="ml-1 rounded-full p-0.5 hover:bg-cyan-400/20"
+            >
+              <TbX size={13} />
+            </button>
+          </span>
+        </motion.div>
+      )}
 
       {/* ── Grille de projets avec transitions Framer Motion ─────── */}
       <motion.div
@@ -347,10 +314,7 @@ export default function Projects() {
               </p>
               <button
                 type="button"
-                onClick={() => {
-                  setCategorieActive('Tous');
-                  setFiltreTech(null);
-                }}
+                onClick={() => setFiltreTech(null)}
                 className="mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-5 py-2 text-xs font-semibold text-cyan-300 transition-all hover:bg-cyan-500/20"
               >
                 <TbX size={14} />

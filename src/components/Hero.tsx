@@ -133,7 +133,7 @@ export default function Hero() {
             <path d="M 15 20 Q 180 5 340 20 T 440 45 T 320 70" stroke="rgba(6, 182, 212, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
             <path d="M 40 70 C 150 45 220 45 280 20" stroke="rgba(6, 182, 212, 0.15)" strokeWidth="1" />
             <path d="M 160 20 C 180 45 320 45 380 70" stroke="rgba(6, 182, 212, 0.15)" strokeWidth="1" />
-            
+
             {/* Nœuds lumineux */}
             <circle cx="15" cy="20" r="2" fill="rgb(34, 211, 238)" className="animate-pulse" />
             <circle cx="160" cy="20" r="1.5" fill="rgb(34, 211, 238)" />
@@ -157,8 +157,8 @@ export default function Hero() {
               <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
             </div>
-            
-            <span>Disponible pour un stage</span>
+
+            <span>Actuellement en Stage à Best-Building</span>
 
             {/* Icône validation checkmark dans un cercle */}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5 text-white/90" aria-hidden="true">

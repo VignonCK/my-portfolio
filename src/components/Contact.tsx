@@ -25,6 +25,9 @@ import {
   TbSend,
   TbSparkles,
   TbCheck,
+  TbCopy,
+  TbAlertTriangle,
+  TbLoader2,
 } from 'react-icons/tb';
 import { siteConfig } from '@/src/data/site-config';
 
@@ -35,17 +38,98 @@ export default function Contact() {
   const [email, setEmail] = useState('');
   const [sujet, setSujet] = useState('');
   const [message, setMessage] = useState('');
-  const [envoye, setEnvoye] = useState(false);
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+  const [statut, setStatut] = useState<'idle' | 'succes' | 'erreur'>('idle');
+  const [messageRetour, setMessageRetour] = useState('');
+  const [emailCopie, setEmailCopie] = useState(false);
 
-  function envoyerMessage(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const copierEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(siteConfig.contact.email);
+      setEmailCopie(true);
+      setTimeout(() => setEmailCopie(false), 2500);
+    } catch {
+      // Fallback
+    }
+  };
+
+  const ouvrirMailto = () => {
     const destinataire = siteConfig.contact.email;
     const corps = `Bonjour,%0D%0A%0D%0A${encodeURIComponent(message)}%0D%0A%0D%0A---%0D%0AExpéditeur : ${encodeURIComponent(nom)} (${encodeURIComponent(email)})`;
     const mailtoUrl = `mailto:${destinataire}?subject=${encodeURIComponent(sujet || 'Contact depuis le portfolio')}&body=${corps}`;
-    
-    // Déclenche l'ouverture du client mail
     window.location.href = mailtoUrl;
-    setEnvoye(true);
+  };
+
+  async function envoyerMessage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (envoiEnCours) return;
+
+    setEnvoiEnCours(true);
+    setStatut('idle');
+    setMessageRetour('');
+
+    const cleAccess = String(siteConfig.contact.cleWeb3Forms ?? '');
+
+    // Si une clé d'accès Web3Forms est fournie, envoi direct en arrière-plan
+    if (cleAccess.trim() !== '') {
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: cleAccess,
+            name: nom,
+            email,
+            subject: sujet || `Message de ${nom} depuis le portfolio`,
+            message,
+            from_name: nom,
+          }),
+        });
+
+        const data: { success?: boolean; message?: string } = await res.json();
+
+        if (res.ok && data.success) {
+          setStatut('succes');
+          setMessageRetour('Message envoyé avec succès. Je vous répondrai dans les plus brefs délais.');
+          setNom('');
+          setEmail('');
+          setSujet('');
+          setMessage('');
+          return;
+        }
+
+        console.error('[Contact] Échec Web3Forms', {
+          status: res.status,
+          statusText: res.statusText,
+          response: data,
+        });
+
+        setStatut('erreur');
+        setMessageRetour(
+          data.message
+            ? `Web3Forms a refusé l’envoi : ${data.message}`
+            : `Envoi direct impossible (HTTP ${res.status}).`
+        );
+      } catch (error) {
+        console.error('[Contact] Erreur réseau pendant l’envoi', error);
+        setStatut('erreur');
+        setMessageRetour('Erreur réseau lors de l’envoi du message. Vérifiez la console du navigateur pour plus de détails.');
+      } finally {
+        setEnvoiEnCours(false);
+      }
+
+      return;
+    }
+
+    // Fallback si la clé n'est pas encore collée dans site-config.ts
+    ouvrirMailto();
+    setStatut('succes');
+    setMessageRetour('Client de messagerie ouvert avec votre message pré-rempli.');
+    setEnvoiEnCours(false);
   }
 
   return (
@@ -106,19 +190,46 @@ export default function Contact() {
             {/* Liste des coordonnées */}
             <div className="space-y-4 pt-2">
               {/* Email */}
-              <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.03] p-4 transition-colors hover:border-cyan-500/30">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300">
-                  <TbMail size={22} />
+              <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/5 bg-white/[0.03] p-4 transition-colors hover:border-cyan-500/30">
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300">
+                    <TbMail size={22} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs text-slate-400 font-medium">Email professionnel</p>
+                    <a
+                      href={`mailto:${siteConfig.contact.email}`}
+                      className="text-sm font-semibold text-white transition-colors hover:text-cyan-300 truncate block"
+                    >
+                      {siteConfig.contact.email}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-slate-400 font-medium">Email professionnel</p>
-                  <a
-                    href={`mailto:${siteConfig.contact.email}`}
-                    className="text-sm font-semibold text-white transition-colors hover:text-cyan-300"
-                  >
-                    {siteConfig.contact.email}
-                  </a>
-                </div>
+
+                {/* Bouton Copier */}
+                <button
+                  type="button"
+                  onClick={copierEmail}
+                  aria-label="Copier l'adresse email"
+                  title="Copier l'adresse email dans le presse-papier"
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 ${
+                    emailCopie
+                      ? 'border-emerald-500/50 bg-emerald-500/20 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                      : 'border-white/10 bg-white/5 text-slate-300 hover:border-cyan-500/40 hover:bg-cyan-500/10 hover:text-cyan-300'
+                  }`}
+                >
+                  {emailCopie ? (
+                    <>
+                      <TbCheck size={13} className="text-emerald-400" />
+                      <span>Copié !</span>
+                    </>
+                  ) : (
+                    <>
+                      <TbCopy size={13} />
+                      <span>Copier</span>
+                    </>
+                  )}
+                </button>
               </div>
 
               {/* Localisation */}
@@ -252,16 +363,32 @@ export default function Contact() {
             {/* Bouton d'envoi */}
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-cyan-500 py-3.5 px-6 text-sm font-bold text-slate-950 shadow-[0_0_18px_rgba(6,182,212,0.35)] transition-all hover:bg-cyan-400 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              disabled={envoiEnCours}
+              aria-busy={envoiEnCours}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-cyan-500 py-3.5 px-6 text-sm font-bold text-slate-950 shadow-[0_0_18px_rgba(6,182,212,0.35)] transition-all hover:bg-cyan-400 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              <TbSend size={16} aria-hidden="true" />
-              <span>Envoyer le message</span>
+              {envoiEnCours ? (
+                <TbLoader2 size={16} aria-hidden="true" className="animate-spin" />
+              ) : (
+                <TbSend size={16} aria-hidden="true" />
+              )}
+              <span>{envoiEnCours ? 'Envoi en cours...' : 'Envoyer le message'}</span>
             </button>
 
-            {envoye && (
-              <p className="flex items-center justify-center gap-1.5 text-center text-xs font-medium text-emerald-400">
-                <TbCheck size={14} />
-                <span>Client de messagerie ouvert avec votre message pré-rempli.</span>
+            {messageRetour && (
+              <p
+                className={`flex items-center justify-center gap-1.5 text-center text-xs font-medium ${
+                  statut === 'erreur' ? 'text-amber-400' : 'text-emerald-400'
+                }`}
+                role="status"
+                aria-live="polite"
+              >
+                {statut === 'erreur' ? (
+                  <TbAlertTriangle size={14} />
+                ) : (
+                  <TbCheck size={14} />
+                )}
+                <span>{messageRetour}</span>
               </p>
             )}
           </form>

@@ -19,6 +19,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import Image from 'next/image';
 import type { IconType } from 'react-icons';
@@ -30,6 +31,10 @@ import {
   TbBolt,
   TbUsersGroup,
   TbSparkles,
+  TbRosetteDiscountCheck,
+  TbProgress,
+  TbChevronLeft,
+  TbChevronRight,
 } from 'react-icons/tb';
 import { siteConfig } from '@/src/data/site-config';
 
@@ -51,13 +56,13 @@ function BlocBio({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
 
   return (
     <div className="mb-24 grid grid-cols-1 gap-10 lg:grid-cols-[2fr_3fr] lg:items-start lg:gap-14">
-      {/* ── Colonne gauche : Photo (Slide-in gauche sobre) ── */}
+      {/* ── Colonne gauche : Photo + Soft Skills (Slide-in gauche sobre) ── */}
       <motion.div
         initial={{ opacity: 0, x: shouldReduceMotion ? 0 : -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="relative mx-auto w-full max-w-sm"
+        className="mx-auto flex w-full max-w-sm flex-col gap-6"
       >
         {/* Cadre photo */}
         <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-white/10 bg-[var(--surface)] shadow-2xl shadow-black/40">
@@ -78,37 +83,9 @@ function BlocBio({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
             </div>
           )}
 
-          {/* Overlay bas : citation */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent p-5">
-            <p className="text-[11px] italic leading-relaxed text-white/70">
-              {bio.citation}
-            </p>
-          </div>
+          {/* Voile sombre uniforme sur tout le cadre pour fondre le détourage clair de la photo */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-slate-950/60" />
         </div>
-      </motion.div>
-
-      {/* ── Colonne droite : Texte & Soft Skills (Slide-in droite sobre) ── */}
-      <motion.div
-        initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: false, amount: 0.15 }}
-        transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
-        className="flex flex-col gap-6"
-      >
-        {/* Paragraphes de présentation */}
-        <div className="flex flex-col gap-4">
-          {bio.paragraphes.map((texte, i) => (
-            <p
-              key={i}
-              className="text-base leading-relaxed text-[var(--text-secondary)]"
-            >
-              {texte}
-            </p>
-          ))}
-        </div>
-
-        {/* Séparateur */}
-        <div className="my-1 h-px w-20 bg-cyan-500/30" aria-hidden="true" />
 
         {/* ── Section Soft Skills / Savoir-être ────────────────────── */}
         <div className="space-y-4">
@@ -121,9 +98,9 @@ function BlocBio({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
             </p>
           </div>
 
-          {/* Grille responsive 2x3 / 3x2 de mini-cartes */}
+          {/* Grille responsive 2x3 de mini-cartes */}
           <div
-            className="grid grid-cols-2 gap-3 sm:grid-cols-3"
+            className="grid grid-cols-2 gap-3"
             aria-label="Qualités comportementales et humaines"
           >
             {bio.qualites.map((qualite) => {
@@ -146,6 +123,484 @@ function BlocBio({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
           </div>
         </div>
       </motion.div>
+
+      {/* ── Colonne droite : Texte de présentation (Slide-in droite sobre) ── */}
+      <motion.div
+        initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.08, ease: 'easeOut' }}
+        className="flex flex-col gap-4"
+      >
+        {bio.paragraphes.map((texte, i) => (
+          <p
+            key={i}
+            className="text-base leading-relaxed text-[var(--text-secondary)]"
+          >
+            {texte}
+          </p>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+// ─── Sous-composant : Modale carrousel réutilisable ─────────────────────────
+//
+// Prend une liste de « diapositives » (image + titre + description propres à
+// chacune) et gère navigation clavier, points de pagination et fermeture.
+// Utilisée par une certification isolée (une seule diapositive dont le
+// titre/description ne changent jamais) et par une carte groupée (plusieurs
+// certificats distincts, chacun avec son propre titre/description).
+
+type DiapositiveModale = {
+  id: string;
+  image: string;
+  titre: string;
+  description: string;
+  soustitre?: string;
+};
+
+function ModaleCarrousel({
+  diapositives,
+  labelAccessible,
+  onFermer,
+}: {
+  diapositives: DiapositiveModale[];
+  labelAccessible: string;
+  onFermer: () => void;
+}) {
+  const [indexActif, setIndexActif] = useState(0);
+  const diapositiveActive = diapositives[indexActif];
+
+  useEffect(() => {
+    const precedentOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const gererTouche = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onFermer();
+      }
+
+      if (diapositives.length > 1 && event.key === 'ArrowRight') {
+        setIndexActif((precedent) => (precedent + 1) % diapositives.length);
+      }
+
+      if (diapositives.length > 1 && event.key === 'ArrowLeft') {
+        setIndexActif((precedent) =>
+          precedent === 0 ? diapositives.length - 1 : precedent - 1
+        );
+      }
+    };
+
+    window.addEventListener('keydown', gererTouche);
+
+    return () => {
+      document.body.style.overflow = precedentOverflow;
+      window.removeEventListener('keydown', gererTouche);
+    };
+  }, [diapositives.length, onFermer]);
+
+  if (!diapositiveActive || typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-slate-950/92 p-4 sm:p-6 backdrop-blur-md"
+      role="dialog"
+      aria-modal="true"
+      aria-label={labelAccessible}
+      onClick={onFermer}
+    >
+      <button
+        type="button"
+        onClick={onFermer}
+        className="absolute right-4 top-4 z-10 rounded-full border border-white/10 bg-slate-950/80 px-3 py-1.5 text-xs font-semibold text-white transition hover:border-cyan-400/50 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+      >
+        Fermer
+      </button>
+
+      <div
+        className="relative flex max-h-[92vh] w-full max-w-[94vw] flex-col items-center justify-center gap-4"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="relative flex w-full items-center justify-center">
+          {diapositives.length > 1 && (
+            <button
+              type="button"
+              onClick={() =>
+                setIndexActif((precedent) =>
+                  precedent === 0 ? diapositives.length - 1 : precedent - 1
+                )
+              }
+              className="absolute left-3 z-10 rounded-full border border-white/10 bg-slate-950/80 p-2 text-white transition hover:border-cyan-400/50 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              aria-label="Voir l’élément précédent"
+            >
+              <TbChevronLeft size={20} />
+            </button>
+          )}
+
+          <Image
+            src={diapositiveActive.image}
+            alt={`Aperçu agrandi de ${diapositiveActive.titre}`}
+            width={1800}
+            height={1400}
+            sizes="94vw"
+            className="max-h-[58vh] w-auto rounded-2xl border border-white/10 object-contain shadow-2xl"
+          />
+
+          {diapositives.length > 1 && (
+            <button
+              type="button"
+              onClick={() =>
+                setIndexActif((precedent) => (precedent + 1) % diapositives.length)
+              }
+              className="absolute right-3 z-10 rounded-full border border-white/10 bg-slate-950/80 p-2 text-white transition hover:border-cyan-400/50 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              aria-label="Voir l’élément suivant"
+            >
+              <TbChevronRight size={20} />
+            </button>
+          )}
+        </div>
+
+        {diapositives.length > 1 && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {diapositives.map((diapositive, diapoIndex) => (
+              <button
+                key={diapositive.id}
+                type="button"
+                onClick={() => setIndexActif(diapoIndex)}
+                className={`h-2.5 w-2.5 rounded-full transition-all ${
+                  diapoIndex === indexActif
+                    ? 'bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.6)]'
+                    : 'bg-white/25 hover:bg-white/40'
+                }`}
+                aria-label={`Afficher ${diapositive.titre}`}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="w-full max-w-3xl px-4 text-center">
+          {diapositives.length > 1 && (
+            <>
+              <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                {diapositiveActive.soustitre}
+              </p>
+              <h3 className="mt-1.5 text-base font-semibold text-white sm:text-lg">
+                {diapositiveActive.titre}
+              </h3>
+            </>
+          )}
+          <p className="mt-2 text-sm leading-7 text-slate-300/90 sm:text-[15px]">
+            {diapositiveActive.description}
+          </p>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+// ─── Sous-composant : Section Certifications ────────────────────────────────
+
+type Certification = (typeof siteConfig.apropos.certifications.liste)[number];
+
+function CarteCertification({
+  certification,
+  index,
+  shouldReduceMotion,
+}: {
+  certification: Certification;
+  index: number;
+  shouldReduceMotion: boolean;
+}) {
+  const estObtenue = certification.statut === 'Obtenue';
+  const imagesModale = certification.galerie?.length
+    ? certification.galerie
+    : certification.apercu
+      ? [certification.apercu]
+      : [];
+  const diapositivesModale: DiapositiveModale[] = imagesModale.map((image, i) => ({
+    id: `${certification.id}-${i}`,
+    image,
+    titre: certification.titre,
+    description: certification.description,
+  }));
+  const [apercuErreur, setApercuErreur] = useState(false);
+  const [modaleOuverte, setModaleOuverte] = useState(false);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : index * 0.08, ease: 'easeOut' }}
+      className="group flex h-full w-full flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900/65 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/35 hover:bg-slate-900/80 hover:shadow-[0_0_24px_rgba(6,182,212,0.14)]"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden border-b border-white/8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
+        {certification.apercu && !apercuErreur ? (
+          <button
+            type="button"
+            onClick={() => setModaleOuverte(true)}
+            className="block h-full w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+            aria-label={`Agrandir l’aperçu de ${certification.titre}`}
+          >
+            <Image
+              src={certification.apercu}
+              alt={`Aperçu de ${certification.titre}`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+              onError={() => setApercuErreur(true)}
+            />
+            <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/10" />
+          </button>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_45%),linear-gradient(135deg,rgba(15,23,42,1),rgba(2,6,23,1))] px-6 text-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300/80">
+                {certification.type}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-300/80">
+                Ajoutez une image d’aperçu pour obtenir une carte plus visuelle.
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="absolute inset-x-0 top-0 flex flex-wrap items-center justify-between gap-1.5 bg-gradient-to-b from-slate-950/82 via-slate-950/35 to-transparent p-2.5">
+          <span className="inline-flex items-center rounded-full border border-cyan-500/25 bg-slate-950/65 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.16em] text-cyan-300 backdrop-blur-sm">
+            {certification.type}
+          </span>
+          <span
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.16em] backdrop-blur-sm ${
+              estObtenue
+                ? 'border-emerald-500/40 bg-slate-950/70 text-emerald-300'
+                : 'border-amber-500/40 bg-slate-950/70 text-amber-300'
+            }`}
+          >
+            {estObtenue ? (
+              <TbRosetteDiscountCheck size={12} aria-hidden="true" />
+            ) : (
+              <TbProgress size={12} aria-hidden="true" />
+            )}
+            <span>{certification.statut}</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4">
+        <div>
+          <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-slate-400">
+            {certification.date}
+          </p>
+          <h3 className="mt-2 max-w-[24ch] text-[0.92rem] font-semibold leading-[1.25] text-white sm:text-[0.98rem] lg:text-[1.02rem]">
+            {certification.titre}
+          </h3>
+          <p className="mt-1.5 text-[12px] font-semibold text-cyan-300/95 sm:text-[13px]">
+            {certification.organisme}
+          </p>
+
+        </div>
+
+        {imagesModale.length === 0 && !String(certification.lien ?? '') && (
+          <span className="mt-6 inline-flex text-xs font-medium text-slate-500">
+            Ajoutez une image d’aperçu ou un lien de consultation pour enrichir cette carte
+          </span>
+        )}
+      </div>
+      {modaleOuverte && diapositivesModale.length > 0 && (
+        <ModaleCarrousel
+          diapositives={diapositivesModale}
+          labelAccessible={`Aperçu agrandi de ${certification.titre}`}
+          onFermer={() => setModaleOuverte(false)}
+        />
+      )}
+    </motion.article>
+  );
+}
+
+// ─── Sous-composant : Carte de certifications groupées (ex. Kaggle) ─────────
+
+type GroupeCertifications = (typeof siteConfig.apropos.certifications.groupes)[number];
+
+function CarteGroupeCertifications({
+  groupe,
+  index,
+  shouldReduceMotion,
+}: {
+  groupe: GroupeCertifications;
+  index: number;
+  shouldReduceMotion: boolean;
+}) {
+  const estObtenue = groupe.statut === 'Obtenue';
+  const [apercuErreur, setApercuErreur] = useState(false);
+  const [modaleOuverte, setModaleOuverte] = useState(false);
+
+  const itemsAvecApercu = groupe.items.filter((item) => item.apercu);
+
+  const diapositivesModale: DiapositiveModale[] = itemsAvecApercu.map((item) => ({
+    id: item.id,
+    image: item.apercu,
+    titre: item.titre,
+    description: item.description,
+    soustitre: item.date,
+  }));
+
+  const imageCouverture = itemsAvecApercu[0]?.apercu;
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.15 }}
+      transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : index * 0.08, ease: 'easeOut' }}
+      className="group flex h-full w-full flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900/65 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/35 hover:bg-slate-900/80 hover:shadow-[0_0_24px_rgba(6,182,212,0.14)]"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden border-b border-white/8 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
+        {imageCouverture && !apercuErreur ? (
+          <button
+            type="button"
+            onClick={() => setModaleOuverte(true)}
+            className="block h-full w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+            aria-label={`Voir les ${groupe.items.length} certificats de ${groupe.titre}`}
+          >
+            <Image
+              src={imageCouverture}
+              alt={`Aperçu de ${groupe.titre}`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+              onError={() => setApercuErreur(true)}
+            />
+            <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/10" />
+          </button>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_top,rgba(245,158,11,0.14),transparent_45%),linear-gradient(135deg,rgba(15,23,42,1),rgba(2,6,23,1))] px-6 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-amber-400/30 bg-amber-500/10 text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+              <TbProgress size={28} aria-hidden="true" />
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-300/90">
+              Certification en cours
+            </p>
+          </div>
+        )}
+
+        <div className="absolute inset-x-0 top-0 flex flex-wrap items-center justify-between gap-1.5 bg-gradient-to-b from-slate-950/82 via-slate-950/35 to-transparent p-2.5">
+          <span className="inline-flex items-center rounded-full border border-cyan-500/25 bg-slate-950/65 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.16em] text-cyan-300 backdrop-blur-sm">
+            {groupe.type}
+          </span>
+          <span
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.16em] backdrop-blur-sm ${
+              estObtenue
+                ? 'border-emerald-500/40 bg-slate-950/70 text-emerald-300'
+                : 'border-amber-500/40 bg-slate-950/70 text-amber-300'
+            }`}
+          >
+            {estObtenue ? (
+              <TbRosetteDiscountCheck size={12} aria-hidden="true" />
+            ) : (
+              <TbProgress size={12} aria-hidden="true" />
+            )}
+            <span>{groupe.statut}</span>
+          </span>
+
+          <span className="inline-flex items-center rounded-full border border-white/15 bg-slate-950/65 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.16em] text-white/80 backdrop-blur-sm">
+            {groupe.items.length} certificats
+          </span>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4">
+        <div>
+          <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-slate-400">
+            {groupe.items.length} certificats
+          </p>
+          <h3 className="mt-2 max-w-[24ch] text-[0.92rem] font-semibold leading-[1.25] text-white sm:text-[0.98rem] lg:text-[1.02rem]">
+            {groupe.titre}
+          </h3>
+          <p className="mt-1.5 text-[12px] font-semibold text-cyan-300/95 sm:text-[13px]">
+            {groupe.organisme}
+          </p>
+          <p className="mt-1.5 text-[12px] font-medium leading-snug text-slate-300/90 sm:text-[13px]">
+            {groupe.resume}
+          </p>
+        </div>
+      </div>
+
+      {modaleOuverte && diapositivesModale.length > 0 && (
+        <ModaleCarrousel
+          diapositives={diapositivesModale}
+          labelAccessible={`Certificats ${groupe.titre}`}
+          onFermer={() => setModaleOuverte(false)}
+        />
+      )}
+    </motion.article>
+  );
+}
+
+// Fusionne `liste` et `groupes` en une seule séquence triée du plus récent
+// au plus ancien (via `dateTri`, format YYYY-MM-DD), pour un classement
+// chronologique global peu importe le type de carte.
+type EntreeCertificationTriee =
+  | { sorte: 'certification'; donnees: Certification }
+  | { sorte: 'groupe'; donnees: GroupeCertifications };
+
+function trierCertifications(
+  liste: readonly Certification[],
+  groupes: readonly GroupeCertifications[]
+): EntreeCertificationTriee[] {
+  const entrees: EntreeCertificationTriee[] = [
+    ...liste.map((c) => ({ sorte: 'certification' as const, donnees: c })),
+    ...groupes.map((g) => ({ sorte: 'groupe' as const, donnees: g })),
+  ];
+
+  return entrees.sort((a, b) => b.donnees.dateTri.localeCompare(a.donnees.dateTri));
+}
+
+function SectionCertifications({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
+  const { certifications } = siteConfig.apropos;
+  const entreesTriees = trierCertifications(certifications.liste, certifications.groupes);
+
+  return (
+    <div className="mb-24">
+      <motion.div
+        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="mb-10 text-center"
+      >
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">
+          {certifications.titre}
+        </p>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)]">
+          {certifications.sousTitre}
+        </p>
+      </motion.div>
+
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-5">
+        {entreesTriees.map((entree, index) => (
+          <div
+            key={entree.donnees.id}
+            className="w-full md:w-[calc(50%-0.625rem)] xl:w-[calc(25%-0.9375rem)]"
+          >
+            {entree.sorte === 'certification' ? (
+              <CarteCertification
+                certification={entree.donnees}
+                index={index}
+                shouldReduceMotion={shouldReduceMotion}
+              />
+            ) : (
+              <CarteGroupeCertifications
+                groupe={entree.donnees}
+                index={index}
+                shouldReduceMotion={shouldReduceMotion}
+              />
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -422,6 +877,9 @@ export default function About() {
 
       {/* ── Bloc bio : photo gauche + texte & soft skills droite ───── */}
       <BlocBio shouldReduceMotion={shouldReduceMotion} />
+
+      {/* ── Certifications : attestations et validations complémentaires ── */}
+      <SectionCertifications shouldReduceMotion={shouldReduceMotion} />
 
       {/* ── Timeline unifiée : Mon Parcours (Formations & Expériences) */}
       <div>

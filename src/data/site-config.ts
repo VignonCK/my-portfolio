@@ -13,7 +13,7 @@
 export const siteConfig = {
   /** Identité du candidat — affichée dans la navbar et les métadonnées */
   nomCandidat: 'Vignon KANLINHANON',
-  titreProfessionnel: 'Élève-Ingénieur en M1 Réseau Informatique et Internet',
+  titreProfessionnel: "Élève-Ingénieur en Réseau Informatique et Internet à l'EPAC (Bénin)",
 
   /**
    * Chemin vers le CV dans public/.
@@ -38,9 +38,10 @@ export const siteConfig = {
 
   /** Textes de la section Hero */
   hero: {
-    badge: 'Élève-Ingénieur en M1 Réseau Informatique et Internet',
-    accroche: "Bâtir aujourd'hui les infrastructures que l'intelligence artificielle pilotera demain.",
-    description: "Actuellement en formation d'ingénieur en réseaux informatiques et internet, je vise à me spécialiser en machine learning appliqué au cloud et aux infrastructures réseaux : une trajectoire que je construis avec exigence et autonomie, projet après projet.",  },
+    badge: "Élève-Ingénieur en Réseau Informatique et Internet à l'EPAC (Bénin)",
+    accroche: "Bâtir aujourd'hui les fondations scientifiques de l'intelligence artificielle de demain.",
+    description: "Actuellement en 2e année du Cycle Ingénieur en réseaux informatiques et internet, je vise à intégrer la R&D des grandes entreprises technologiques mondiales en tant que Research Scientist en intelligence artificielle : une trajectoire que je construis avec curiosité et rigueur, projet après projet.",
+  },
 
   /** ----------------------------------------------------------------
    * Section « À propos » — Module 3
@@ -54,8 +55,8 @@ export const siteConfig = {
       citation: '« L\'excellence technique n\'est pas une destination, c\'est une discipline quotidienne. »',
       paragraphes: [
         "Actuellement en stage académique de fin de 3e année, je m'apprête à intégrer la 2e année du Cycle Ingénieur en Génie Informatique et Télécommunication à l'EPAC, où je me spécialise en réseaux informatiques et internet. Mon parcours, ponctué d'une Mention Très Bien au Baccalauréat (16,45/20) et d'une moyenne de 15,20/20 en 1ère année du cycle ingénieur, reflète une exigence académique constante et une volonté d'excellence que je traduis concrètement à travers mes projets techniques.",
-        "Ma passion pour l'intelligence artificielle est née d'un déclic : l'École d'Été en Intelligence Artificielle (EEIA 2025) de la Fondation Vallet, où j'ai découvert le Machine Learning et une vision claire de ce que je veux devenir : Ingénieur Machine Learning, spécialisé dans les infrastructures réseaux et cloud. Depuis, je construis chaque projet, réseau ou logiciel, comme une étape vers cette spécialisation.",
-        "Curieux, je m'appuie sur la recherche avant de me lancer ; rigoureux, j'analyse les exigences avant de concevoir ; autonome, je mène mes projets de bout en bout, de la conception à l'implémentation. Cette même exigence, je la mets au service du collectif : Secrétaire Général de l'Organe de Contrôle du H3CP par le passé, j'y ai appliqué la même rigueur à la coordination de mes pairs qu'à mes projets techniques. En dehors des projets techniques, sport et lecture m'aident à garder l'esprit vif. Mon objectif est de décrocher une bourse d'excellence pour poursuivre une formation d'ingénieur de haut niveau, avant de rejoindre une grande entreprise technologique, avec, à terme, l'ambition de créer des startups à fort impact en Afrique.",
+        "Ma passion pour l'intelligence artificielle est née d'un déclic : l'École d'Été en Intelligence Artificielle (EEIA 2025) de la Fondation Vallet, où j'ai découvert le Machine Learning et une vision claire de ce que je veux devenir : Research Scientist en intelligence artificielle au sein de la R&D des grandes entreprises technologiques mondiales, avec l'ambition, à terme, d'évoluer vers la direction stratégique de l'IA (Director of AI / Technical Product Manager). Depuis, je construis chaque projet, réseau ou logiciel, comme une étape vers cette trajectoire.",
+        "Curieux, je m'appuie sur la recherche avant de me lancer ; rigoureux, j'analyse les exigences avant de concevoir ; autonome, je mène mes projets de bout en bout, de la conception à l'implémentation. Cette même exigence, je la mets au service du collectif : Secrétaire Général de l'Organe de Contrôle du H3CP par le passé, j'y ai appliqué la même rigueur à la coordination de mes pairs qu'à mes projets techniques. En dehors des projets techniques, sport et lecture m'aident à garder l'esprit vif. Mon objectif est de décrocher une bourse d'excellence pour poursuivre une formation d'ingénieur de haut niveau, avant d'intégrer la R&D d'une grande entreprise technologique mondiale en tant que Research Scientist en intelligence artificielle avec, à long terme, l'ambition d'évoluer vers la direction stratégique de l'IA, puis de créer des startups à fort impact en Afrique.",
       ],
       qualites: ['Curieux', 'Rigoureux', 'Autonome', 'Méthodique', 'Persévérant', 'Esprit d\'équipe'],
     },
@@ -102,6 +103,19 @@ export const siteConfig = {
             '/certifications/apercus/eeia_2025_p1.png',
             '/certifications/apercus/eeia_2025_p2.png',
           ],
+          lien: '',
+        },
+        {
+          id: 'indabax-benin-2026',
+          type: 'Attestation' as const,
+          titre: 'Attestation de participation au Deep Learning IndabaX Bénin 2026',
+          organisme: 'Deep Learning IndabaX Benin Republic',
+          date: '10 – 12 septembre 2026',
+          dateTri: '2026-09-12',
+          statut: 'Obtenue' as const,
+          description: "IndabaX Bénin 2026 : Participation à l'événement de la communauté africaine d'intelligence artificielle (Deep Learning IndabaX), incluant un hackathon où notre équipe a conçu un outil d'aide à la décision pour réduire les pertes post-récolte de tomates sur le corridor de Dantokpa.",
+          apercu: '/certifications/apercus/indabax_benin_2026.jpeg',
+          galerie: ['/certifications/apercus/indabax_benin_2026.jpeg'],
           lien: '',
         },
       ],
@@ -258,9 +272,9 @@ export const siteConfig = {
     timeline: [
       {
         id: 'stage-best-building',
-        periode: 'Juil. 2026 – Août 2026',
+        periode: 'Juil. 2026 – Sept. 2026',
         intitule: 'Stage Académique : Développement Web & Logiciel de Gestion',
-        etablissement: 'Best-Building',
+        etablissement: 'Groupe Best-Building & Future Buildings',
         type: 'experience' as const,
         detail: 'Conception et mise en ligne de la vitrine web de l’entreprise et développement d’une solution logicielle interne dédiée à la gestion financière et comptable.',
       },

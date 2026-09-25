@@ -158,7 +158,7 @@ export default function Hero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
             </div>
 
-            <span>Actuellement en Stage à Best-Building</span>
+            <span>Actuellement en Semestre 7 : 2e année Cycle Ingénieur (M1)</span>
 
             {/* Icône validation checkmark dans un cercle */}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-3.5 w-3.5 text-white/90" aria-hidden="true">

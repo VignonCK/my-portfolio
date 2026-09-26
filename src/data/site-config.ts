@@ -317,11 +317,12 @@ export const siteConfig = {
    * Section « Contact » — Module 7
    * ---------------------------------------------------------------- */
   contact: {
-    titre: 'Entrons en contact',
-    sousTitre: 'Disponible pour échanger sur vos opportunités de recherche, de stages ou de bourses d’excellence.',
+    titre: 'Échangeons sur vos opportunités',
+    sousTitre: "Disponible pour échanger sur vos opportunités : bourses d'excellence, stages, postes, projets ou missions freelance.",
+    description: "Que ce soit pour une bourse d'excellence, un stage, un poste, un projet d'ingénierie ou une mission freelance, je vous réponds avec réactivité et rigueur.",
     email: 'vignonkanlinhanon5@gmail.com',
     localisation: 'AKOGBATO / Cotonou, Bénin',
-    statutDisponibilite: 'À l’écoute d’opportunités de stages & bourses d’excellence',
+    statutDisponibilite: 'À l’écoute de toute opportunité',
     /**
      * Clé d'accès gratuite Web3Forms (https://web3forms.com).
      * Renseignez votre clé d'accès reçue par email pour activer l'envoi direct en boîte de réception.

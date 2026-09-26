@@ -8,17 +8,11 @@
  *   - Les affirmations de résultats chiffrés sont claires et factuelles.
  */
 
-// Catégories construites au fur et à mesure des projets réels ajoutés,
-// plutôt qu'une liste figée à l'avance.
-export type CategorieProjet = 'Développement Web';
-
 export type StatutProjet = 'Terminé' | 'En cours';
 
 export interface Projet {
   identifiant: string;
   titre: string;
-  categorie: CategorieProjet[];
-  etiquetteCategorie: string; // Libellé court pour le badge de domaine
   resume: string; // Synthèse courte 2-3 lignes pour la carte
   descriptionLongue: string; // Description détaillée pour la carte
   technologies: string[]; // Liste des technologies/outils utilisés
@@ -36,8 +30,6 @@ export const PROJETS: Projet[] = [
   {
     identifiant: 'best-building-web-platform',
     titre: 'Création du site web institutionnel de Best Building',
-    categorie: ['Développement Web'],
-    etiquetteCategorie: 'Next.js / Django',
     resume:
       "Conception d'un site web institutionnel pour Best Building, entreprise du BTP, avec un back-office permettant à l'équipe de gérer contenus, réalisations et devis en autonomie.",
     descriptionLongue:
@@ -52,8 +44,6 @@ export const PROJETS: Projet[] = [
   {
     identifiant: 'unipath-gestion-concours',
     titre: 'UniPath, Plateforme de Gestion des Concours Universitaires',
-    categorie: ['Développement Web'],
-    etiquetteCategorie: 'Node.js / PostgreSQL / Prisma',
     resume:
       "Modélisation et architecture des données d'UniPath, plateforme académique digitalisant l'inscription, l'instruction des dossiers et la validation des concours universitaires.",
     descriptionLongue:
@@ -68,8 +58,6 @@ export const PROJETS: Projet[] = [
   {
     identifiant: 'blog-lecture',
     titre: 'Blog Lecture, Carnet de lecture numérique',
-    categorie: ['Développement Web'],
-    etiquetteCategorie: 'Laravel / MySQL',
     resume:
       "Un blog personnel où je partage mes fiches de lecture, mes citations préférées et mes réflexions littéraires, avec espace membre et newsletter.",
     descriptionLongue:
@@ -82,6 +70,36 @@ export const PROJETS: Projet[] = [
     misEnAvant: false,
     statut: 'Terminé',
     dateRealisation: '2026-05',
+  },
+  {
+    identifiant: 'dantokpa-prediction-pourriture',
+    titre: 'Prédiction de pourriture post-récolte sur le corridor de Dantokpa',
+    resume:
+      "Conception de l'interface d'un outil d'aide à la décision pour les revendeuses de tomates du marché de Dantokpa. L'outil compare en FCFA trois choix : vendre aujourd'hui, attendre 24 h ou vendre sur un autre marché.",
+    descriptionLongue:
+      "Projet réalisé en équipe de trois pour le hackathon IndabaX Bénin 2026, afin de réduire les pertes des revendeuses de tomates du corridor de Dantokpa, à Cotonou. L'utilisatrice saisit sa zone, la quantité et l'état de ses tomates. L'application récupère alors la température en direct et les distances de trajet, puis consulte sept ans de relevés de prix du Programme alimentaire mondial. Un moteur de décision simule 2 000 scénarios par option et indique ce que chaque choix rapporterait réellement, sous forme de fourchette et avec un niveau de confiance exprimé en « X fois sur 10 ». J'ai conçu l'interface Streamlit et son déploiement en ligne, en veillant à ce que la vente immédiate reste toujours visible, pour qu'une vendeuse qui a besoin d'argent tout de suite ne soit jamais poussée à attendre.",
+    technologies: ['Python', 'Streamlit', 'pandas', 'NumPy', 'Open-Meteo', 'OpenRouteService', 'Monte-Carlo', 'Streamlit Cloud'],
+    image: '/images/projects/dantokpa.jpeg',
+    urlGithub: 'https://github.com/VignonCK/dantokpa-interface',
+    codeVisible: true,
+    urlDemo: 'https://dantokpa.streamlit.app/',
+    misEnAvant: false,
+    statut: 'Terminé',
+    dateRealisation: '2026-09',
+  },
+  {
+    identifiant: 'digilib',
+    titre: 'Digilib',
+    resume:
+      'Application web de bibliothèque numérique avec système de paiement Flutterwave et accès via Google Drive.',
+    descriptionLongue:
+      "Digilib est une plateforme de bibliothèque numérique permettant aux utilisateurs de découvrir et d'acquérir des ouvrages en ligne. Le paiement est géré via Flutterwave, et les fichiers des ouvrages sont hébergés et distribués via Google Drive. Les données de la bibliothèque et des utilisateurs sont gérées avec Supabase.",
+    technologies: ['React', 'TypeScript', 'Vite', 'Supabase', 'Flutterwave', 'Google Drive'],
+    image: '/images/projects/digilib.jpeg',
+    urlDemo: 'https://digilib-gamma.vercel.app/',
+    misEnAvant: false,
+    statut: 'Terminé',
+    dateRealisation: '2026-01',
   },
 ];
 

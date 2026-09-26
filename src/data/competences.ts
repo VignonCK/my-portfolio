@@ -5,13 +5,9 @@
  *
  * Entité DomaineCompetences → Competence, conforme au modèle de données §4.1 du CdC.
  *
- * Règle de gestion critique (§ Module 6) :
- *   Toute compétence avec niveau 'avancé' DOIT avoir projetsAssocies non vide.
- *   Un console.warn est émis en développement si cette règle est violée (Skills.tsx).
- *
- * [COPYWRITING] — noms, niveaux, pourcentages et projets associés à affiner
- *   lors de la passe finale. Les identifiants dans projetsAssocies correspondent
- *   aux champs `identifiant` de src/data/projets.ts.
+ * Les compétences et leurs niveaux sont dérivés des technologies réellement
+ * utilisées dans les projets de src/data/projets.ts. Les identifiants dans
+ * projetsAssocies correspondent aux champs `identifiant` de ce fichier.
  */
 
 export type NiveauCompetence = 'notion' | 'opérationnel' | 'avancé';
@@ -23,7 +19,6 @@ export interface Competence {
   /**
    * Niveau indicatif en pourcentage (0-100) pour l'affichage visuel.
    * Corrélation orientative : notion ≈ 35-45 | opérationnel ≈ 65-75 | avancé ≈ 85-95
-   * [COPYWRITING] — à affiner lors de la passe finale.
    */
   pourcentage: number;
   /** Identifiants des projets de projets.ts qui démontrent cette compétence */
@@ -39,103 +34,22 @@ export interface DomaineCompetences {
 }
 
 export const DOMAINES_COMPETENCES: DomaineCompetences[] = [
-  // ── 1. Infrastructure & Réseaux ──────────────────────────────────────────
+  // ── 1. Développement Web ──────────────────────────────────────────────────
   {
-    id: 'infra-reseaux',
-    nom: 'Infrastructure & Réseaux',
-    labelCourt: 'Réseaux',
-    competences: [
-      {
-        id: 'cisco-ios',
-        nom: 'Cisco IOS',
-        niveau: 'opérationnel',
-        pourcentage: 72,
-        projetsAssocies: ['infrastructure-dmz-securisee-cisco'],
-      },
-      {
-        id: 'vlan-trunking',
-        nom: 'VLAN / Trunking',
-        niveau: 'opérationnel',
-        pourcentage: 70,
-        projetsAssocies: ['infrastructure-dmz-securisee-cisco'],
-      },
-      {
-        id: 'cisco-asa',
-        nom: 'Cisco ASA / Pare-feu',
-        niveau: 'opérationnel',
-        pourcentage: 68,
-        projetsAssocies: ['infrastructure-dmz-securisee-cisco'],
-      },
-      {
-        id: 'ospf-routage',
-        nom: 'OSPF / Routage IP',
-        niveau: 'opérationnel',
-        pourcentage: 65,
-        projetsAssocies: ['infrastructure-dmz-securisee-cisco'],
-      },
-      {
-        id: 'nat-acl',
-        nom: 'NAT / ACL',
-        niveau: 'notion',
-        pourcentage: 42,
-        projetsAssocies: ['infrastructure-dmz-securisee-cisco'],
-      },
-    ],
-  },
-
-  // ── 2. Intelligence Artificielle / Data ──────────────────────────────────
-  {
-    id: 'ia-data',
-    nom: 'Intelligence Artificielle / Data',
-    labelCourt: 'IA & Data',
-    competences: [
-      {
-        id: 'python',
-        nom: 'Python',
-        niveau: 'opérationnel',
-        pourcentage: 72,
-        projetsAssocies: ['moteur-algebre-lineaire-ml'],
-      },
-      {
-        id: 'numpy-scipy',
-        nom: 'NumPy / SciPy',
-        niveau: 'opérationnel',
-        pourcentage: 68,
-        projetsAssocies: ['moteur-algebre-lineaire-ml'],
-      },
-      {
-        id: 'algebre-ml',
-        nom: 'Algèbre linéaire ML',
-        niveau: 'opérationnel',
-        pourcentage: 65,
-        projetsAssocies: ['moteur-algebre-lineaire-ml'],
-      },
-      {
-        id: 'pandas',
-        nom: 'Pandas',
-        niveau: 'notion',
-        pourcentage: 40,
-        projetsAssocies: ['moteur-algebre-lineaire-ml'],
-      },
-      {
-        id: 'jupyter',
-        nom: 'Jupyter Notebook',
-        niveau: 'notion',
-        pourcentage: 38,
-        projetsAssocies: ['moteur-algebre-lineaire-ml'],
-      },
-    ],
-  },
-
-  // ── 3. Développement Logiciel ─────────────────────────────────────────────
-  {
-    id: 'dev-logiciel',
-    nom: 'Développement Logiciel',
+    id: 'dev-web',
+    nom: 'Développement Web',
     labelCourt: 'Dev Web',
     competences: [
       {
-        id: 'nextjs-react',
-        nom: 'Next.js / React',
+        id: 'react',
+        nom: 'React',
+        niveau: 'avancé',
+        pourcentage: 85,
+        projetsAssocies: ['best-building-web-platform', 'unipath-gestion-concours', 'digilib'],
+      },
+      {
+        id: 'nextjs',
+        nom: 'Next.js',
         niveau: 'opérationnel',
         pourcentage: 72,
         projetsAssocies: ['best-building-web-platform'],
@@ -143,60 +57,162 @@ export const DOMAINES_COMPETENCES: DomaineCompetences[] = [
       {
         id: 'typescript',
         nom: 'TypeScript',
-        niveau: 'opérationnel',
-        pourcentage: 68,
-        projetsAssocies: ['best-building-web-platform'],
+        niveau: 'avancé',
+        pourcentage: 82,
+        projetsAssocies: ['best-building-web-platform', 'unipath-gestion-concours', 'digilib'],
       },
       {
         id: 'tailwind',
         nom: 'Tailwind CSS',
+        niveau: 'avancé',
+        pourcentage: 85,
+        projetsAssocies: ['best-building-web-platform', 'unipath-gestion-concours', 'blog-lecture'],
+      },
+      {
+        id: 'vite',
+        nom: 'Vite',
         niveau: 'opérationnel',
         pourcentage: 70,
+        projetsAssocies: ['unipath-gestion-concours', 'blog-lecture', 'digilib'],
+      },
+      {
+        id: 'nodejs-express',
+        nom: 'Node.js / Express',
+        niveau: 'opérationnel',
+        pourcentage: 68,
+        projetsAssocies: ['unipath-gestion-concours'],
+      },
+      {
+        id: 'laravel-php',
+        nom: 'Laravel / PHP',
+        niveau: 'opérationnel',
+        pourcentage: 65,
+        projetsAssocies: ['blog-lecture'],
+      },
+      {
+        id: 'django',
+        nom: 'Django',
+        niveau: 'notion',
+        pourcentage: 45,
         projetsAssocies: ['best-building-web-platform'],
       },
       {
-        id: 'html-css',
-        nom: 'HTML5 / CSS3',
+        id: 'streamlit',
+        nom: 'Streamlit',
         niveau: 'opérationnel',
-        pourcentage: 75,
-        projetsAssocies: ['best-building-web-platform'],
+        pourcentage: 68,
+        projetsAssocies: ['dantokpa-prediction-pourriture'],
       },
     ],
   },
 
-  // ── 4. DevOps & Outils ────────────────────────────────────────────────────
+  // ── 2. Data & Intelligence Artificielle ───────────────────────────────────
   {
-    id: 'devops-outils',
-    nom: 'DevOps & Outils',
+    id: 'data-ia',
+    nom: 'Data & Intelligence Artificielle',
+    labelCourt: 'Data & IA',
+    competences: [
+      {
+        id: 'python',
+        nom: 'Python',
+        niveau: 'avancé',
+        pourcentage: 85,
+        projetsAssocies: ['dantokpa-prediction-pourriture'],
+      },
+      {
+        id: 'pandas',
+        nom: 'pandas',
+        niveau: 'opérationnel',
+        pourcentage: 72,
+        projetsAssocies: ['dantokpa-prediction-pourriture'],
+      },
+      {
+        id: 'numpy',
+        nom: 'NumPy',
+        niveau: 'opérationnel',
+        pourcentage: 68,
+        projetsAssocies: ['dantokpa-prediction-pourriture'],
+      },
+      {
+        id: 'monte-carlo',
+        nom: 'Simulation Monte-Carlo',
+        niveau: 'opérationnel',
+        pourcentage: 65,
+        projetsAssocies: ['dantokpa-prediction-pourriture'],
+      },
+    ],
+  },
+
+  // ── 3. Bases de données ───────────────────────────────────────────────────
+  {
+    id: 'bases-donnees',
+    nom: 'Bases de données',
+    labelCourt: 'Bases de données',
+    competences: [
+      {
+        id: 'postgresql',
+        nom: 'PostgreSQL',
+        niveau: 'avancé',
+        pourcentage: 80,
+        projetsAssocies: ['best-building-web-platform', 'unipath-gestion-concours'],
+      },
+      {
+        id: 'prisma',
+        nom: 'Prisma',
+        niveau: 'opérationnel',
+        pourcentage: 70,
+        projetsAssocies: ['unipath-gestion-concours'],
+      },
+      {
+        id: 'supabase',
+        nom: 'Supabase',
+        niveau: 'opérationnel',
+        pourcentage: 68,
+        projetsAssocies: ['unipath-gestion-concours', 'digilib'],
+      },
+      {
+        id: 'mysql',
+        nom: 'MySQL',
+        niveau: 'opérationnel',
+        pourcentage: 65,
+        projetsAssocies: ['blog-lecture'],
+      },
+    ],
+  },
+
+  // ── 4. Outils & Déploiement ────────────────────────────────────────────────
+  {
+    id: 'outils-deploiement',
+    nom: 'Outils & Déploiement',
     labelCourt: 'Outils',
     competences: [
       {
         id: 'git-github',
         nom: 'Git / GitHub',
-        niveau: 'opérationnel',
-        pourcentage: 70,
-        projetsAssocies: [],
-      },
-      {
-        id: 'linux',
-        nom: 'Linux',
-        niveau: 'notion',
-        pourcentage: 35,
-        projetsAssocies: [],
+        niveau: 'avancé',
+        pourcentage: 82,
+        projetsAssocies: ['dantokpa-prediction-pourriture', 'blog-lecture'],
       },
       {
         id: 'vercel',
         nom: 'Vercel',
-        niveau: 'notion',
-        pourcentage: 42,
-        projetsAssocies: ['best-building-web-platform'],
+        niveau: 'opérationnel',
+        pourcentage: 72,
+        projetsAssocies: ['best-building-web-platform', 'unipath-gestion-concours', 'digilib'],
       },
       {
-        id: 'packet-tracer',
-        nom: 'Packet Tracer',
+        id: 'api-externes',
+        nom: 'Intégration d\'API externes',
         niveau: 'opérationnel',
-        pourcentage: 70,
-        projetsAssocies: ['infrastructure-dmz-securisee-cisco'],
+        pourcentage: 68,
+        projetsAssocies: ['dantokpa-prediction-pourriture'],
+      },
+      {
+        id: 'flutterwave',
+        nom: 'Flutterwave (paiement)',
+        niveau: 'notion',
+        pourcentage: 42,
+        projetsAssocies: ['digilib'],
       },
     ],
   },

@@ -158,6 +158,9 @@ export default function Contact() {
         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)]">
           {siteConfig.contact.sousTitre}
         </p>
+        <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)]">
+          {siteConfig.contact.description}
+        </p>
       </motion.div>
 
       {/* ── Grille 2 colonnes : Coordonnées + Formulaire ────────── */}
@@ -298,7 +301,7 @@ export default function Contact() {
                 type="text"
                 value={nom}
                 onChange={(e) => setNom(e.target.value)}
-                placeholder="ex. Prof. Jean Dupont"
+                placeholder="ex. Kokou Dossou"
                 className="w-full rounded-2xl border border-white/15 bg-slate-950 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition-colors focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
                 required
               />
@@ -317,7 +320,7 @@ export default function Contact() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="votre.email@universite.fr"
+                placeholder="votre.email@exemple.com"
                 className="w-full rounded-2xl border border-white/15 bg-slate-950 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition-colors focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
                 required
               />
@@ -336,7 +339,7 @@ export default function Contact() {
                 type="text"
                 value={sujet}
                 onChange={(e) => setSujet(e.target.value)}
-                placeholder="ex. Candidature Bourse d’Excellence / Échange technique"
+                placeholder="ex. Offre de stage / Bourse d’excellence / Collaboration technique"
                 className="w-full rounded-2xl border border-white/15 bg-slate-950 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition-colors focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
               />
             </div>

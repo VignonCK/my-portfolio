@@ -45,7 +45,7 @@ function ImageProjet({ projet }: { projet: Projet }) {
           <div className="h-2.5 w-2.5 rounded-full bg-rose-500/70" />
           <div className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
           <div className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
-          <span className="ml-2 text-[10px] text-slate-500">{projet.etiquetteCategorie}</span>
+          <span className="ml-2 text-[10px] text-slate-500">{projet.technologies[0]}</span>
         </div>
 
         <div className="my-auto flex flex-col items-center justify-center gap-2 text-center">

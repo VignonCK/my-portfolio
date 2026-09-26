@@ -13,7 +13,7 @@
 export const siteConfig = {
   /** Identité du candidat — affichée dans la navbar et les métadonnées */
   nomCandidat: 'Vignon KANLINHANON',
-  titreProfessionnel: "Élève-Ingénieur en Réseau Informatique et Internet à l'EPAC (Bénin)",
+  titreProfessionnel: 'Élève-Ingénieur en Réseau Info & Internet, EPAC, Bénin',
 
   /**
    * Chemin vers le CV dans public/.
@@ -38,7 +38,7 @@ export const siteConfig = {
 
   /** Textes de la section Hero */
   hero: {
-    badge: "Élève-Ingénieur en Réseau Informatique et Internet à l'EPAC (Bénin)",
+    badge: 'Élève-Ingénieur en Réseau Info & Internet, EPAC, Bénin',
     accroche: "Bâtir aujourd'hui les fondations scientifiques de l'intelligence artificielle de demain.",
     description: "Actuellement en 2e année du Cycle Ingénieur en réseaux informatiques et internet, je vise à intégrer la R&D des grandes entreprises technologiques mondiales en tant que Research Scientist en intelligence artificielle : une trajectoire que je construis avec curiosité et rigueur, projet après projet.",
   },
@@ -54,7 +54,7 @@ export const siteConfig = {
       photoUrl: '/photo-apropos.jpeg',
       citation: '« L\'excellence technique n\'est pas une destination, c\'est une discipline quotidienne. »',
       paragraphes: [
-        "Actuellement en stage académique de fin de 3e année, je m'apprête à intégrer la 2e année du Cycle Ingénieur en Génie Informatique et Télécommunication à l'EPAC, où je me spécialise en réseaux informatiques et internet. Mon parcours, ponctué d'une Mention Très Bien au Baccalauréat (16,45/20) et d'une moyenne de 15,20/20 en 1ère année du cycle ingénieur, reflète une exigence académique constante et une volonté d'excellence que je traduis concrètement à travers mes projets techniques.",
+        "Après un stage académique de fin de 3e année, j'intègre aujourd'hui la 2e année du Cycle Ingénieur (M1) en Génie Informatique et Télécommunication à l'EPAC, où je me spécialise en réseaux informatiques et internet. Mon parcours, ponctué d'une Mention Très Bien au Baccalauréat (16,45/20) et d'une moyenne de 15,20/20 en 1ère année du cycle ingénieur, reflète une exigence académique constante et une volonté d'excellence que je traduis concrètement à travers mes projets techniques.",
         "Ma passion pour l'intelligence artificielle est née d'un déclic : l'École d'Été en Intelligence Artificielle (EEIA 2025) de la Fondation Vallet, où j'ai découvert le Machine Learning et une vision claire de ce que je veux devenir : Research Scientist en intelligence artificielle au sein de la R&D des grandes entreprises technologiques mondiales, avec l'ambition, à terme, d'évoluer vers la direction stratégique de l'IA (Director of AI / Technical Product Manager). Depuis, je construis chaque projet, réseau ou logiciel, comme une étape vers cette trajectoire.",
         "Curieux, je m'appuie sur la recherche avant de me lancer ; rigoureux, j'analyse les exigences avant de concevoir ; autonome, je mène mes projets de bout en bout, de la conception à l'implémentation. Cette même exigence, je la mets au service du collectif : Secrétaire Général de l'Organe de Contrôle du H3CP par le passé, j'y ai appliqué la même rigueur à la coordination de mes pairs qu'à mes projets techniques. En dehors des projets techniques, sport et lecture m'aident à garder l'esprit vif. Mon objectif est de décrocher une bourse d'excellence pour poursuivre une formation d'ingénieur de haut niveau, avant d'intégrer la R&D d'une grande entreprise technologique mondiale en tant que Research Scientist en intelligence artificielle avec, à long terme, l'ambition d'évoluer vers la direction stratégique de l'IA, puis de créer des startups à fort impact en Afrique.",
       ],

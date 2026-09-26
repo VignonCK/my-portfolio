@@ -319,7 +319,7 @@ export const siteConfig = {
   contact: {
     titre: 'Échangeons sur vos opportunités',
     sousTitre: "Disponible pour échanger sur vos opportunités : bourses d'excellence, stages, postes, projets ou missions freelance.",
-    description: "Que ce soit pour une bourse d'excellence, un stage, un poste, un projet d'ingénierie ou une mission freelance, je vous réponds avec réactivité et rigueur.",
+    description: "Que ce soit pour une bourse d'excellence, un stage, un poste, un projet d'ingénierie ou une mission freelance en réseaux et intelligence artificielle, je vous réponds avec réactivité et rigueur.",
     email: 'vignonkanlinhanon5@gmail.com',
     localisation: 'AKOGBATO / Cotonou, Bénin',
     statutDisponibilite: 'À l’écoute de toute opportunité',
@@ -336,7 +336,7 @@ export const siteConfig = {
   footer: {
     createur: 'Vignon KANLINHANON',
     mentionDroits: 'Tous droits réservés.',
-    dateDerniereMaj: 'Août 2026',
+    dateDerniereMaj: 'Septembre 2026',
     liensNavigation: [
       { label: 'Accueil', href: '#hero' },
       { label: 'À propos', href: '#apropos' },

@@ -6,7 +6,7 @@
  * Entrées : DOMAINES_COMPETENCES (src/data/competences.ts)
  * Sorties  : <section id="competences"> avec :
  *   1. En-tête de section
- *   2. Barre d'onglets colorés par domaine (Réseaux / IA & Data / Dev Web / Outils)
+ *   2. Barre d'onglets colorés par domaine (Dev Web / Data & IA / Bases de données / Outils)
  *   3. Grille de cartes élégantes avec anneau de progression SVG, icônes d'outils (react-icons),
  *      et effet d'ombre/cadre lumineux au survol.
  */
@@ -15,26 +15,29 @@ import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { IconType } from 'react-icons';
 import {
-  SiCisco,
-  SiPython,
-  SiNumpy,
-  SiPandas,
-  SiJupyter,
+  SiReact,
   SiNextdotjs,
   SiTypescript,
   SiTailwindcss,
-  SiHtml5,
+  SiVite,
+  SiNodedotjs,
+  SiLaravel,
+  SiDjango,
+  SiStreamlit,
+  SiPython,
+  SiPandas,
+  SiNumpy,
+  SiPostgresql,
+  SiPrisma,
+  SiSupabase,
+  SiMysql,
   SiGit,
-  SiLinux,
   SiVercel,
 } from 'react-icons/si';
 import {
-  TbNetwork,
-  TbShieldCheck,
-  TbRoute,
-  TbShieldLock,
-  TbBrain,
-  TbTopologyComplex,
+  TbChartHistogram,
+  TbCloudDataConnection,
+  TbCurrencyDollar,
 } from 'react-icons/tb';
 import { DOMAINES_COMPETENCES, type Competence } from '@/src/data/competences';
 
@@ -58,28 +61,28 @@ const COULEURS: Record<
     glowRgba: string;
   }
 > = {
-  'infra-reseaux': {
+  'dev-web': {
     hex: '#22d3ee',
     ongletActif:
       'border-cyan-400 bg-cyan-400/10 text-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.35)]',
     ongletHover: 'hover:border-cyan-400/40 hover:text-cyan-400/70',
     glowRgba: 'rgba(34, 211, 238, 0.3)',
   },
-  'ia-data': {
+  'data-ia': {
     hex: '#fb923c',
     ongletActif:
       'border-orange-400 bg-orange-400/10 text-orange-300 shadow-[0_0_14px_rgba(251,146,60,0.35)]',
     ongletHover: 'hover:border-orange-400/40 hover:text-orange-400/70',
     glowRgba: 'rgba(251, 146, 60, 0.3)',
   },
-  'dev-logiciel': {
+  'bases-donnees': {
     hex: '#a78bfa',
     ongletActif:
       'border-violet-400 bg-violet-400/10 text-violet-300 shadow-[0_0_14px_rgba(167,139,250,0.35)]',
     ongletHover: 'hover:border-violet-400/40 hover:text-violet-400/70',
     glowRgba: 'rgba(167, 139, 250, 0.3)',
   },
-  'devops-outils': {
+  'outils-deploiement': {
     hex: '#34d399',
     ongletActif:
       'border-emerald-400 bg-emerald-400/10 text-emerald-300 shadow-[0_0_14px_rgba(52,211,153,0.35)]',
@@ -91,28 +94,31 @@ const COULEURS: Record<
 // ─── Mapping des icônes par compétence ────────────────────────────────────────
 
 const ICONS: Record<string, IconType> = {
-  // Réseaux
-  'cisco-ios': SiCisco,
-  'vlan-trunking': TbNetwork,
-  'cisco-asa': TbShieldCheck,
-  'ospf-routage': TbRoute,
-  'nat-acl': TbShieldLock,
-  // IA & Data
-  'python': SiPython,
-  'numpy-scipy': SiNumpy,
-  'algebre-ml': TbBrain,
-  'pandas': SiPandas,
-  'jupyter': SiJupyter,
-  // Dev Web
-  'nextjs-react': SiNextdotjs,
+  // Développement Web
+  'react': SiReact,
+  'nextjs': SiNextdotjs,
   'typescript': SiTypescript,
   'tailwind': SiTailwindcss,
-  'html-css': SiHtml5,
-  // DevOps & Outils
+  'vite': SiVite,
+  'nodejs-express': SiNodedotjs,
+  'laravel-php': SiLaravel,
+  'django': SiDjango,
+  'streamlit': SiStreamlit,
+  // Data & IA
+  'python': SiPython,
+  'pandas': SiPandas,
+  'numpy': SiNumpy,
+  'monte-carlo': TbChartHistogram,
+  // Bases de données
+  'postgresql': SiPostgresql,
+  'prisma': SiPrisma,
+  'supabase': SiSupabase,
+  'mysql': SiMysql,
+  // Outils & Déploiement
   'git-github': SiGit,
-  'linux': SiLinux,
   'vercel': SiVercel,
-  'packet-tracer': TbTopologyComplex,
+  'api-externes': TbCloudDataConnection,
+  'flutterwave': TbCurrencyDollar,
 };
 
 // ─── Sous-composant : Carte de compétence avec Anneau SVG & Icône ─────────────
@@ -241,7 +247,7 @@ export default function Skills() {
   const [activeTab, setActiveTab] = useState(DOMAINES_COMPETENCES[0].id);
 
   const domaineActif = DOMAINES_COMPETENCES.find((d) => d.id === activeTab)!;
-  const configActif = COULEURS[activeTab] ?? COULEURS['infra-reseaux'];
+  const configActif = COULEURS[activeTab] ?? COULEURS['dev-web'];
 
   return (
     <section

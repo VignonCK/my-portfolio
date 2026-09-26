@@ -20,8 +20,8 @@ export const siteConfig = {
    * Remplacer uniquement le fichier PDF, jamais ce chemin,
    * pour ne pas casser les liens déjà envoyés dans des candidatures.
    */
-  cvUrl: '/cv_vignon_kanlinhanon_stages.pdf',
-  cvNomFichier: 'CV_Vignon_Kanlinhanon_Stages.pdf',
+  cvUrl: '/cv_bourse_djena.pdf',
+  cvNomFichier: 'CV_Vignon_Kanlinhanon_Bourse.pdf',
 
   /**
    * Chemin de la photo de profil dans public/ (ex: '/photo-profil.jpg').
